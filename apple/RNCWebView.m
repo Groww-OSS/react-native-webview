@@ -334,11 +334,9 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
     _prefsUsed = YES;
   }
   #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 150000 /* iOS 15 */
-    if (@available(iOS 15.0, *)) {
-      if (!_textInteractionEnabled) {
+    if (@available(iOS 15.0, *) && !_textInteractionEnabled) {
         [prefs setValue:@FALSE forKey:@"textInteractionEnabled"];
         _prefsUsed = YES;
-      }
     }
   #endif
   if (_prefsUsed) {
