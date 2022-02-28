@@ -36,6 +36,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.facebook.react.views.scroll.ScrollEvent;
 import com.facebook.react.views.scroll.ScrollEventType;
@@ -201,7 +202,13 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
         RNCWebViewModule module = getModule(reactContext);
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        DownloadManager.Request request;
+        try {
+          request = new DownloadManager.Request(Uri.parse(url));
+        } catch (IllegalArgumentException e) {
+          Toast.makeText(webView.getContext(),"Something went wrong",Toast.LENGTH_SHORT).show();
+          return;
+        }
 
         String fileName = URLUtil.guessFileName(url, contentDisposition, mimetype);
         String downloadMessage = "Downloading " + fileName;
