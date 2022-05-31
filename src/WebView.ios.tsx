@@ -2,7 +2,6 @@ import React from 'react';
 import {
   UIManager as NotTypedUIManager,
   View,
-  requireNativeComponent,
   NativeModules,
   Image,
   findNodeHandle,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import invariant from 'invariant';
 
+import RNCWebView from "./WebViewNativeComponent.ios";
 import {
   defaultOriginWhitelist,
   createOnShouldStartLoadWithRequest,
@@ -50,16 +50,13 @@ const processDecelerationRate = (
 
 const RNCWebViewManager = NativeModules.RNCWebViewManager as ViewManager;
 
-const RNCWebView: typeof NativeWebViewIOS = requireNativeComponent(
-  'RNCWebView',
-);
-
 class WebView extends React.Component<IOSWebViewProps, State> {
   static defaultProps = {
     javaScriptEnabled: true,
     cacheEnabled: true,
     originWhitelist: defaultOriginWhitelist,
     useSharedProcessPool: true,
+    textInteractionEnabled: true,
   };
 
   static isFileUploadSupported = async () => {
@@ -195,13 +192,17 @@ class WebView extends React.Component<IOSWebViewProps, State> {
   onLoadingError = (event: WebViewErrorEvent) => {
     event.persist(); // persist this event because we need to store it
     const { onError, onLoadEnd } = this.props;
+
+    if (onError) {
+      onError(event);
+    } else {
+      console.warn('Encountered an error loading page', event.nativeEvent);
+    }
+
     if (onLoadEnd) {
       onLoadEnd(event);
     }
-    if (onError) {
-      onError(event);
-    }
-    console.warn('Encountered an error loading page', event.nativeEvent);
+    if (event.isDefaultPrevented()) return;
 
     this.setState({
       lastErrorEvent: event.nativeEvent,
@@ -265,6 +266,7 @@ class WebView extends React.Component<IOSWebViewProps, State> {
 
   componentDidUpdate(prevProps: IOSWebViewProps) {
     this.showRedboxOnPropChanges(prevProps, 'allowsInlineMediaPlayback');
+    this.showRedboxOnPropChanges(prevProps, 'allowsAirPlayForMediaPlayback');
     this.showRedboxOnPropChanges(prevProps, 'incognito');
     this.showRedboxOnPropChanges(prevProps, 'mediaPlaybackRequiresUserAction');
     this.showRedboxOnPropChanges(prevProps, 'dataDetectorTypes');

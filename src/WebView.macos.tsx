@@ -2,7 +2,6 @@ import React from 'react';
 import {
   UIManager as NotTypedUIManager,
   View,
-  requireNativeComponent,
   NativeModules,
   Image,
   findNodeHandle,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import invariant from 'invariant';
 
+import RNCWebView from "./WebViewNativeComponent.ios";
 import {
   defaultOriginWhitelist,
   createOnShouldStartLoadWithRequest,
@@ -37,10 +37,6 @@ const UIManager = NotTypedUIManager as RNCWebViewUIManagerMacOS;
 const { resolveAssetSource } = Image;
 
 const RNCWebViewManager = NativeModules.RNCWebViewManager as ViewManager;
-
-const RNCWebView: typeof NativeWebViewMacOS = requireNativeComponent(
-  'RNCWebView',
-);
 
 class WebView extends React.Component<MacOSWebViewProps, State> {
   static defaultProps = {
@@ -183,13 +179,17 @@ class WebView extends React.Component<MacOSWebViewProps, State> {
   onLoadingError = (event: WebViewErrorEvent) => {
     event.persist(); // persist this event because we need to store it
     const { onError, onLoadEnd } = this.props;
+
+    if (onError) {
+      onError(event);
+    } else {
+      console.warn('Encountered an error loading page', event.nativeEvent);
+    }
+
     if (onLoadEnd) {
       onLoadEnd(event);
     }
-    if (onError) {
-      onError(event);
-    }
-    console.warn('Encountered an error loading page', event.nativeEvent);
+    if (event.isDefaultPrevented()) return;
 
     this.setState({
       lastErrorEvent: event.nativeEvent,
@@ -253,6 +253,7 @@ class WebView extends React.Component<MacOSWebViewProps, State> {
 
   componentDidUpdate(prevProps: MacOSWebViewProps) {
     this.showRedboxOnPropChanges(prevProps, 'allowsInlineMediaPlayback');
+    this.showRedboxOnPropChanges(prevProps, 'allowsAirPlayForMediaPlayback');
     this.showRedboxOnPropChanges(prevProps, 'incognito');
     this.showRedboxOnPropChanges(prevProps, 'mediaPlaybackRequiresUserAction');
   }
