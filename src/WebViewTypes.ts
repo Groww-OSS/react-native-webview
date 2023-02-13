@@ -35,7 +35,6 @@ export type RNCWebViewUIManagerAndroid = RNCWebViewUIManager<
 >;
 export type RNCWebViewUIManagerIOS = RNCWebViewUIManager<WebViewCommands>;
 export type RNCWebViewUIManagerMacOS = RNCWebViewUIManager<WebViewCommands>;
-export type RNCWebViewUIManagerWindows = RNCWebViewUIManager<WebViewCommands>;
 
 type WebViewState = 'IDLE' | 'LOADING' | 'ERROR';
 
@@ -72,12 +71,6 @@ declare class NativeWebViewAndroidComponent extends Component<AndroidNativeWebVi
 declare const NativeWebViewAndroidBase: Constructor<NativeMethodsMixin> &
   typeof NativeWebViewAndroidComponent;
 export class NativeWebViewAndroid extends NativeWebViewAndroidBase {}
-
-// eslint-disable-next-line react/prefer-stateless-function
-declare class NativeWebViewWindowsComponent extends Component<WindowsNativeWebViewProps> {}
-declare const NativeWebViewWindowsBase: Constructor<NativeMethodsMixin> &
-  typeof NativeWebViewWindowsComponent;
-export class NativeWebViewWindows extends NativeWebViewWindowsBase {}
 
 export interface ContentInsetProp {
   top?: number;
@@ -408,14 +401,6 @@ export interface MacOSNativeWebViewProps extends CommonNativeWebViewProps {
   scrollEnabled?: boolean;
   useSharedProcessPool?: boolean;
   onContentProcessDidTerminate?: (event: WebViewTerminatedEvent) => void;
-}
-
-export interface WindowsNativeWebViewProps extends CommonNativeWebViewProps {
-  testID?: string;
-}
-
-export interface WindowsWebViewProps extends WebViewSharedProps {
-  useWebView2?: boolean;
 }
 
 export interface IOSWebViewProps extends WebViewSharedProps {
