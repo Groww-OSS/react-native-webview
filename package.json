@@ -16,14 +16,12 @@
     "ios": "react-native run-ios --project-path example/ios",
     "macos": "react-native run-macos --scheme WebviewExample --project-path example/macos",
     "start": "cd example && react-native start",
-    "windows": "install-windows-test-app --project-directory example/windows && react-native run-windows --root example --arch x64",
     "ci": "CI=true && yarn lint",
     "ci:publish": "yarn semantic-release",
     "lint": "yarn tsc --noEmit && yarn eslint ./src --ext .ts,.tsx",
     "build": "yarn tsc",
     "prepare": "yarn build",
-    "appium": "appium",
-    "test:windows": "yarn jest --setupFiles=./jest-setups/jest.setup.js"
+    "appium": "appium"
   },
   "rn-docs": {
     "title": "Webview",
@@ -63,7 +61,6 @@
     "react-native": "0.68.5",
     "react-native-macos": "0.68.62",
     "react-native-test-app": "2.3.2",
-    "react-native-windows": "0.68.4",
     "selenium-appium": "1.0.2",
     "selenium-webdriver": "4.0.0-alpha.7",
     "semantic-release": "15.13.24",
@@ -79,7 +76,6 @@
     "apple",
     "ios",
     "macos",
-    "windows",
     "lib",
     "index.js",
     "index.d.ts",
