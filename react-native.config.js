@@ -5,7 +5,6 @@ const project = (() => {
     const {
       androidManifestPath,
       iosProjectPath,
-      windowsProjectPath,
     } = require('react-native-test-app');
     return {
       android: {
@@ -16,11 +15,6 @@ const project = (() => {
       },
       ios: {
         project: iosProjectPath('example/ios'),
-      },
-      windows: fs.existsSync('example/windows/WebviewExample.sln') && {
-        sourceDir: path.join('example', 'windows'),
-        solutionFile: 'WebviewExample.sln',
-        project: windowsProjectPath(path.join(__dirname, 'example', 'windows')),
       },
     };
   } catch (_) {
@@ -37,16 +31,6 @@ module.exports = {
   },
   dependency: {
     platforms: {
-      windows: {
-        sourceDir: 'windows',
-        solutionFile: 'ReactNativeWebView.sln',
-        projects: [
-          {
-            projectFile: 'ReactNativeWebView/ReactNativeWebView.vcxproj',
-            directDependency: true,
-          },
-        ],
-      },
     },
   },
   ...(project ? { project } : undefined),

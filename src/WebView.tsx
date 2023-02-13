@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { IOSWebViewProps, AndroidWebViewProps, WindowsWebViewProps } from './WebViewTypes';
+import { IOSWebViewProps, AndroidWebViewProps } from './WebViewTypes';
 
-export type WebViewProps = IOSWebViewProps & AndroidWebViewProps & WindowsWebViewProps;
+export type WebViewProps = IOSWebViewProps & AndroidWebViewProps;
 
 // This "dummy" WebView is to render something for unsupported platforms,
 // like for example Expo SDK "web" platform.
