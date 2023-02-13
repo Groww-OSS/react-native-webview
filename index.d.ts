@@ -1,10 +1,10 @@
 import { Component } from 'react';
 // eslint-disable-next-line
-import { IOSWebViewProps, AndroidWebViewProps, WindowsWebViewProps } from './lib/WebViewTypes';
+import { IOSWebViewProps, AndroidWebViewProps } from './lib/WebViewTypes';
 
 export { FileDownload, WebViewMessageEvent, WebViewNavigation } from "./lib/WebViewTypes";
 
-export type WebViewProps = IOSWebViewProps & AndroidWebViewProps & WindowsWebViewProps;
+export type WebViewProps = IOSWebViewProps & AndroidWebViewProps;
 
 declare class WebView<P = {}> extends Component<WebViewProps & P> {
     /**
