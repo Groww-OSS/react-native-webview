@@ -14,7 +14,6 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --project-path example/ios",
-    "macos": "react-native run-macos --scheme WebviewExample --project-path example/macos",
     "start": "cd example && react-native start",
     "ci": "CI=true && yarn lint",
     "ci:publish": "yarn semantic-release",
@@ -59,7 +58,6 @@
     "metro-react-native-babel-preset": "^0.67.0",
     "react": "17.0.2",
     "react-native": "0.68.5",
-    "react-native-macos": "0.68.62",
     "react-native-test-app": "2.3.2",
     "selenium-appium": "1.0.2",
     "selenium-webdriver": "4.0.0-alpha.7",
@@ -75,7 +73,6 @@
     "android",
     "apple",
     "ios",
-    "macos",
     "lib",
     "index.js",
     "index.d.ts",
