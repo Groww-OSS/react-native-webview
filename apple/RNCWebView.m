@@ -48,22 +48,6 @@ NSString *const CUSTOM_SELECTOR = @"_CUSTOM_SELECTOR_";
 @end
 #endif // !TARGET_OS_OSX
 
-#if TARGET_OS_OSX
-@interface RNCWKWebView : WKWebView
-@end
-@implementation RNCWKWebView
-- (void)scrollWheel:(NSEvent *)theEvent {
-  RNCWebView *rncWebView = (RNCWebView *)[self superview];
-  RCTAssert([rncWebView isKindOfClass:[rncWebView class]], @"superview must be an RNCWebView");
-  if (![rncWebView scrollEnabled]) {
-    [[self nextResponder] scrollWheel:theEvent];
-    return;
-  }
-  [super scrollWheel:theEvent];
-}
-@end
-#endif // TARGET_OS_OSX
-
 @interface RNCWebView () <WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler, WKHTTPCookieStoreObserver,
 #if !TARGET_OS_OSX
 UIScrollViewDelegate,
@@ -318,23 +302,6 @@ RCTAutoInsetsProtocol>
   return nil;
 }
 
-/**
- * Enables file input on macos, see https://developer.apple.com/documentation/webkit/wkuidelegate/1641952-webview
- */
-#if TARGET_OS_OSX
-- (void)webView:(WKWebView *)webView runOpenPanelWithParameters:(WKOpenPanelParameters *)parameters initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSArray<NSURL *> *URLs))completionHandler
-{
-  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-  openPanel.allowsMultipleSelection = parameters.allowsMultipleSelection;
-  [openPanel beginSheetModalForWindow:webView.window completionHandler:^(NSInteger result) {
-    if (result == NSModalResponseOK)
-      completionHandler(openPanel.URLs);
-    else
-      completionHandler(nil);
-  }];
-}
-#endif //Target_OS_OSX
-
 - (WKWebViewConfiguration *)setUpWkWebViewConfig
 {
   WKWebViewConfiguration *wkWebViewConfig = [WKWebViewConfiguration new];
@@ -399,7 +366,7 @@ RCTAutoInsetsProtocol>
                                                             name:HistoryShimName];
   [self resetupScripts:wkWebViewConfig];
   
-  if(@available(macos 10.11, ios 9.0, *)) {
+  if(@available(ios 9.0, *)) {
     wkWebViewConfig.allowsAirPlayForMediaPlayback = _allowsAirPlayForMediaPlayback;
   }
   
@@ -598,15 +565,7 @@ RCTAutoInsetsProtocol>
   self.opaque = _webView.opaque = opaque;
   _webView.scrollView.backgroundColor = backgroundColor;
   _webView.backgroundColor = backgroundColor;
-#else
-  // https://stackoverflow.com/questions/40007753/macos-wkwebview-background-transparency
-  NSOperatingSystemVersion version = { 10, 12, 0 };
-  if ([[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:version]) {
-    [_webView setValue:@(opaque) forKey: @"drawsBackground"];
-  } else {
-    [_webView setValue:@(!opaque) forKey: @"drawsTransparentBackground"];
-  }
-#endif // !TARGET_OS_OSX
+#endif
 }
 
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000 /* __IPHONE_11_0 */
@@ -1081,9 +1040,6 @@ RCTAutoInsetsProtocol>
   const NSRect RCTSingleTextFieldFrame = NSMakeRect(0.0, 0.0, 275.0, 22.0);
   NSTextField *textField = [[NSTextField alloc] initWithFrame:RCTSingleTextFieldFrame];
   textField.cell.scrollable = YES;
-  if (@available(macOS 10.11, *)) {
-    textField.maximumNumberOfLines = 1;
-  }
   textField.stringValue = defaultText;
   [alert setAccessoryView:textField];
   
