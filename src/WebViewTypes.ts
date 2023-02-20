@@ -272,7 +272,6 @@ export interface CommonNativeWebViewProps extends ViewProps {
   injectedJavaScriptBeforeContentLoaded?: string;
   injectedJavaScriptForMainFrameOnly?: boolean;
   injectedJavaScriptBeforeContentLoadedForMainFrameOnly?: boolean;
-  javaScriptCanOpenWindowsAutomatically?: boolean;
   mediaPlaybackRequiresUserAction?: boolean;
   messagingEnabled: boolean;
   onScroll?: (event: WebViewScrollEvent) => void;
@@ -939,12 +938,6 @@ export interface WebViewSharedProps extends ViewProps {
    * @platform android
    */
   javaScriptEnabled?: boolean;
-
-  /**
-   * A Boolean value indicating whether JavaScript can open windows without user interaction.
-   * The default value is `false`.
-   */
-  javaScriptCanOpenWindowsAutomatically?: boolean;
 
   /**
    * Stylesheet object to set the style of the container view.
