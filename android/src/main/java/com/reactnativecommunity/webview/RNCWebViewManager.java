@@ -1247,74 +1247,16 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onPermissionRequest(final PermissionRequest request) {
-
-      grantedPermissions = new ArrayList<>();
-
-      ArrayList<String> requestedAndroidPermissions = new ArrayList<>();
-      for (String requestedResource : request.getResources()) {
-        String androidPermission = null;
-
-        if (requestedResource.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
-          androidPermission = Manifest.permission.RECORD_AUDIO;
-        } else if (requestedResource.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
-          androidPermission = Manifest.permission.CAMERA;
-        } else if(requestedResource.equals(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID)) {
-          if (mAllowsProtectedMedia) {
-              grantedPermissions.add(requestedResource);
-          } else {
-              /**
-               * Legacy handling (Kept in case it was working under some conditions (given Android version or something))
-               *
-               * Try to ask user to grant permission using Activity.requestPermissions
-               *
-               * Find more details here: https://github.com/react-native-webview/react-native-webview/pull/2732
-               */
-              androidPermission = PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID;
-          }
-        }
-        // TODO: RESOURCE_MIDI_SYSEX.
-
-        if (androidPermission != null) {
-          if (ContextCompat.checkSelfPermission(mReactContext, androidPermission) == PackageManager.PERMISSION_GRANTED) {
-            grantedPermissions.add(requestedResource);
-          } else {
-            requestedAndroidPermissions.add(androidPermission);
-          }
-        }
-      }
-
-      // If all the permissions are already granted, send the response to the WebView synchronously
-      if (requestedAndroidPermissions.isEmpty()) {
-        request.grant(grantedPermissions.toArray(new String[0]));
-        grantedPermissions = null;
-        return;
-      }
-
-      // Otherwise, ask to Android System for native permissions asynchronously
-
-      this.permissionRequest = request;
-
-      requestPermissions(requestedAndroidPermissions);
+      request.deny();
     }
 
 
     @Override
     public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
 
-      if (ContextCompat.checkSelfPermission(mReactContext, Manifest.permission.ACCESS_FINE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED) {
+      // Always deny
+      callback.invoke(origin, true, false);
 
-        /*
-         * Keep the trace of callback and origin for the async permission request
-         */
-        geolocationPermissionCallback = callback;
-        geolocationPermissionOrigin = origin;
-
-        requestPermissions(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
-
-      } else {
-        callback.invoke(origin, true, false);
-      }
     }
 
     private PermissionAwareActivity getPermissionAwareActivity() {
@@ -1326,101 +1268,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
       }
       return (PermissionAwareActivity) activity;
     }
-
-    private synchronized void requestPermissions(List<String> permissions) {
-
-      /*
-       * If permissions request dialog is displayed on the screen and another request is sent to the
-       * activity, the last permission asked is skipped. As a work-around, we use pendingPermissions
-       * to store next required permissions.
-       */
-
-      if (permissionsRequestShown) {
-        pendingPermissions.addAll(permissions);
-        return;
-      }
-
-      PermissionAwareActivity activity = getPermissionAwareActivity();
-      permissionsRequestShown = true;
-
-      activity.requestPermissions(
-        permissions.toArray(new String[0]),
-        COMMON_PERMISSION_REQUEST,
-        webviewPermissionsListener
-      );
-
-      // Pending permissions have been sent, the list can be cleared
-      pendingPermissions.clear();
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private PermissionListener webviewPermissionsListener = (requestCode, permissions, grantResults) -> {
-
-      permissionsRequestShown = false;
-
-      /*
-       * As a "pending requests" approach is used, requestCode cannot help to define if the request
-       * came from geolocation or camera/audio. This is why shouldAnswerToPermissionRequest is used
-       */
-      boolean shouldAnswerToPermissionRequest = false;
-
-      for (int i = 0; i < permissions.length; i++) {
-
-        String permission = permissions[i];
-        boolean granted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-
-        if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)
-          && geolocationPermissionCallback != null
-          && geolocationPermissionOrigin != null) {
-
-          if (granted) {
-            geolocationPermissionCallback.invoke(geolocationPermissionOrigin, true, false);
-          } else {
-            geolocationPermissionCallback.invoke(geolocationPermissionOrigin, false, false);
-          }
-
-          geolocationPermissionCallback = null;
-          geolocationPermissionOrigin = null;
-        }
-
-        if (permission.equals(Manifest.permission.RECORD_AUDIO)) {
-          if (granted && grantedPermissions != null) {
-            grantedPermissions.add(PermissionRequest.RESOURCE_AUDIO_CAPTURE);
-          }
-          shouldAnswerToPermissionRequest = true;
-        }
-
-        if (permission.equals(Manifest.permission.CAMERA)) {
-          if (granted && grantedPermissions != null) {
-            grantedPermissions.add(PermissionRequest.RESOURCE_VIDEO_CAPTURE);
-          }
-          shouldAnswerToPermissionRequest = true;
-        }
-
-        if (permission.equals(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID)) {
-          if (granted && grantedPermissions != null) {
-            grantedPermissions.add(PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID);
-          }
-          shouldAnswerToPermissionRequest = true;
-        }
-      }
-
-      if (shouldAnswerToPermissionRequest
-        && permissionRequest != null
-        && grantedPermissions != null) {
-        permissionRequest.grant(grantedPermissions.toArray(new String[0]));
-        permissionRequest = null;
-        grantedPermissions = null;
-      }
-
-      if (!pendingPermissions.isEmpty()) {
-        requestPermissions(pendingPermissions);
-        return false;
-      }
-
-      return true;
-    };
 
     protected void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType) {
       getModule(mReactContext).startPhotoPickerIntent(filePathCallback, acceptType);
