@@ -1,5 +1,5 @@
 {
-  "name": "react-native-webview",
+  "name": "@exodus/react-native-webview",
   "description": "React Native WebView component for iOS, Android, macOS, and Windows",
   "main": "index.js",
   "main-internal": "src/index.ts",
@@ -9,8 +9,8 @@
     "Thibault Malbranche <malbranche.thibault@gmail.com>"
   ],
   "license": "MIT",
-  "version": "11.26.1",
-  "homepage": "https://github.com/react-native-webview/react-native-webview#readme",
+  "version": "11.26.1-exodus.0",
+  "homepage": "https://github.com/ExodusMovement/react-native-webview#readme",
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios --project-path example/ios",
@@ -67,7 +67,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/react-native-webview/react-native-webview.git"
+    "url": "https://github.com/ExodusMovement/react-native-webview.git"
   },
   "files": [
     "android",
