@@ -318,10 +318,7 @@ RCTAutoInsetsProtocol>
     [prefs setValue:@TRUE forKey:@"allowFileAccessFromFileURLs"];
     _prefsUsed = YES;
   }
-  if (_javaScriptCanOpenWindowsAutomatically) {
-    [prefs setValue:@TRUE forKey:@"javaScriptCanOpenWindowsAutomatically"];
-    _prefsUsed = YES;
-  }
+  [prefs setValue:@FALSE forKey:@"javaScriptCanOpenWindowsAutomatically"];
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 140500 /* iOS 14.5 */
   if (@available(iOS 14.5, *)) {
     if (!_textInteractionEnabled) {

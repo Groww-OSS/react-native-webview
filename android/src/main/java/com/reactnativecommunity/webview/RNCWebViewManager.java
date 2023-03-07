@@ -447,7 +447,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
   @ReactProp(name = "javaScriptCanOpenWindowsAutomatically")
   public void setJavaScriptCanOpenWindowsAutomatically(WebView view, boolean enabled) {
-    view.getSettings().setJavaScriptCanOpenWindowsAutomatically(enabled);
+    view.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
   }
 
   @ReactProp(name = "allowFileAccessFromFileURLs")

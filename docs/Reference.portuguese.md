@@ -35,7 +35,6 @@ Este documento apresenta as propriedades e métodos públicos para o React Nativ
 - [`decelerationRate`](Reference.portuguese.md#decelerationrate)
 - [`domStorageEnabled`](Reference.portuguese.md#domstorageenabled)
 - [`javaScriptEnabled`](Reference.portuguese.md#javascriptenabled)
-- [`javaScriptCanOpenWindowsAutomatically`](Reference.portuguese.md#javascriptcanopenwindowsautomatically)
 - [`androidHardwareAccelerationDisabled`](Reference.portuguese.md#androidHardwareAccelerationDisabled)
 - [`androidLayerType`](Reference.portuguese.md#androidLayerType)
 - [`mixedContentMode`](Reference.portuguese.md#mixedcontentmode)
@@ -824,16 +823,6 @@ Valor booleano para controlar se o DOM Storage está habilitado. Usado apenas no
 ### `javaScriptEnabled`[⬆](#props-index)<!-- Link gerado com jump2header -->
 
 Valor booleano para habilitar JavaScript na `WebView`. O valor padrão é `true`.
-
-| Tipo | Requerido |
-| ---- | --------- |
-| bool | Não       |
-
----
-
-### `javaScriptCanOpenWindowsAutomatically`[⬆](#props-index)<!-- Link gerado com jump2header -->
-
-Um valor booleano que indica se o JavaScript pode abrir janelas sem interação do usuário. O valor padrão é `falso`.
 
 | Tipo | Requerido |
 | ---- | --------- |
