@@ -1,6 +1,6 @@
 import escapeStringRegexp from 'escape-string-regexp';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Linking, View, ActivityIndicator, Text, Platform } from 'react-native';
+import { View, ActivityIndicator, Text, Platform } from 'react-native';
 import {
   OnShouldStartLoadWithRequest,
   ShouldStartLoadRequestEvent,
@@ -53,15 +53,6 @@ const createOnShouldStartLoadWithRequest = (
     const { url, lockIdentifier } = nativeEvent;
 
     if (!passesWhitelist(compileWhitelist(originWhitelist), url)) {
-      Linking.canOpenURL(url).then((supported) => {
-        if (supported) {
-          return Linking.openURL(url);
-        }
-        console.warn(`Can't open url: ${url}`);
-        return undefined;
-      }).catch(e => {
-        console.warn('Error opening URL: ', e);
-      });
       shouldStart = false;
     } else if (onShouldStartLoadWithRequest) {
       shouldStart = onShouldStartLoadWithRequest(nativeEvent);
