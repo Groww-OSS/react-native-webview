@@ -1,9 +1,7 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import {
-  Image,
   View,
   NativeModules,
-  ImageSourcePropType,
 } from 'react-native';
 import invariant from 'invariant';
 
@@ -32,7 +30,6 @@ const Commands = codegenNativeCommands({
   supportedCommands: ['goBack', 'goForward', 'reload', 'stopLoading', /* 'injectJavaScript', */ 'requestFocus', 'postMessage', 'loadUrl'],
 });
 
-const { resolveAssetSource } = Image;
 const processDecelerationRate = (
   decelerationRate: DecelerationRateConstant | number | undefined,
 ) => {
@@ -203,7 +200,7 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
       ref={webViewRef}
       sharedCookiesEnabled={sharedCookiesEnabled}
       // TODO: find a better way to type this.
-      source={resolveAssetSource(source as ImageSourcePropType)}
+      source={source}
       style={webViewStyles}
     />
   );
