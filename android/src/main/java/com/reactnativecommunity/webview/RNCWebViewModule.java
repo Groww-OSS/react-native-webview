@@ -95,28 +95,6 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
     }
   }
 
-  private PermissionListener getWebviewFileDownloaderPermissionListener(String downloadingMessage, String lackPermissionToDownloadMessage) {
-    return new PermissionListener() {
-      @Override
-      public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-          case FILE_DOWNLOAD_PERMISSION_REQUEST: {
-            // If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-              if (downloadRequest != null) {
-                downloadFile(downloadingMessage);
-              }
-            } else {
-              Toast.makeText(getCurrentActivity().getApplicationContext(), lackPermissionToDownloadMessage, Toast.LENGTH_LONG).show();
-            }
-            return true;
-          }
-        }
-        return false;
-      }
-    };
-  }
-
   public RNCWebViewModule(ReactApplicationContext reactContext) {
     super(reactContext);
     reactContext.addActivityEventListener(this);
@@ -319,21 +297,6 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
     }
 
     Toast.makeText(getCurrentActivity().getApplicationContext(), downloadingMessage, Toast.LENGTH_LONG).show();
-  }
-
-  public boolean grantFileDownloaderPermissions(String downloadingMessage, String lackPermissionToDownloadMessage) {
-    // Permission not required for Android Q and above
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-      return true;
-    }
-
-    boolean result = ContextCompat.checkSelfPermission(getCurrentActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    if (!result && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      PermissionAwareActivity activity = getPermissionAwareActivity();
-      activity.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, FILE_DOWNLOAD_PERMISSION_REQUEST, getWebviewFileDownloaderPermissionListener(downloadingMessage, lackPermissionToDownloadMessage));
-    }
-
-    return result;
   }
 
   protected boolean needsCameraPermission() {
