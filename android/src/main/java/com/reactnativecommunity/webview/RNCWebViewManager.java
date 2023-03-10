@@ -1249,7 +1249,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
 
       // Always deny
-      callback.invoke(origin, true, false);
+      callback.invoke(origin, false, false);
 
     }
 
