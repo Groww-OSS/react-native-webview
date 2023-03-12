@@ -159,7 +159,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   protected WebViewConfig mWebViewConfig;
 
   protected RNCWebChromeClient mWebChromeClient = null;
-  protected boolean mAllowsFullscreenVideo = false;
   protected boolean mAllowsProtectedMedia = false;
   protected @Nullable String mUserAgent = null;
   protected @Nullable String mUserAgentWithApplicationName = null;
@@ -567,14 +566,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     }
   }
 
-  @ReactProp(name = "allowsFullscreenVideo")
-  public void setAllowsFullscreenVideo(
-    WebView view,
-    @Nullable Boolean allowsFullscreenVideo) {
-    mAllowsFullscreenVideo = allowsFullscreenVideo != null && allowsFullscreenVideo;
-    setupWebChromeClient((ReactContext)view.getContext(), view);
-  }
-
   @ReactProp(name = "allowFileAccess")
   public void setAllowFileAccess(
     WebView view,
@@ -756,101 +747,16 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
   protected void setupWebChromeClient(ReactContext reactContext, WebView webView) {
     Activity activity = reactContext.getCurrentActivity();
-
-    if (mAllowsFullscreenVideo && activity != null) {
-      int initialRequestedOrientation = activity.getRequestedOrientation();
-
-      mWebChromeClient = new RNCWebChromeClient(reactContext, webView) {
-        @Override
-        public Bitmap getDefaultVideoPoster() {
-          return Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
-        }
-
-        @Override
-        public void onShowCustomView(View view, CustomViewCallback callback) {
-          if (mVideoView != null) {
-            callback.onCustomViewHidden();
-            return;
-          }
-
-          mVideoView = view;
-          mCustomViewCallback = callback;
-
-          activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mVideoView.setSystemUiVisibility(FULLSCREEN_SYSTEM_UI_VISIBILITY);
-            activity.getWindow().setFlags(
-              WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-              WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            );
-          }
-
-          mVideoView.setBackgroundColor(Color.BLACK);
-
-          // Since RN's Modals interfere with the View hierarchy
-          // we will decide which View to hide if the hierarchy
-          // does not match (i.e., the WebView is within a Modal)
-          // NOTE: We could use `mWebView.getRootView()` instead of `getRootView()`
-          // but that breaks the Modal's styles and layout, so we need this to render
-          // in the main View hierarchy regardless
-          ViewGroup rootView = getRootView();
-          rootView.addView(mVideoView, FULLSCREEN_LAYOUT_PARAMS);
-
-          // Different root views, we are in a Modal
-          if (rootView.getRootView() != mWebView.getRootView()) {
-            mWebView.getRootView().setVisibility(View.GONE);
-          } else {
-            // Same view hierarchy (no Modal), just hide the WebView then
-            mWebView.setVisibility(View.GONE);
-          }
-
-          mReactContext.addLifecycleEventListener(this);
-        }
-
-        @Override
-        public void onHideCustomView() {
-          if (mVideoView == null) {
-            return;
-          }
-
-          // Same logic as above
-          ViewGroup rootView = getRootView();
-
-          if (rootView.getRootView() != mWebView.getRootView()) {
-            mWebView.getRootView().setVisibility(View.VISIBLE);
-          } else {
-            // Same view hierarchy (no Modal)
-            mWebView.setVisibility(View.VISIBLE);
-          }
-
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-          }
-
-          rootView.removeView(mVideoView);
-          mCustomViewCallback.onCustomViewHidden();
-
-          mVideoView = null;
-          mCustomViewCallback = null;
-
-          activity.setRequestedOrientation(initialRequestedOrientation);
-
-          mReactContext.removeLifecycleEventListener(this);
-        }
-      };
-    } else {
-      if (mWebChromeClient != null) {
-        mWebChromeClient.onHideCustomView();
-      }
-
-      mWebChromeClient = new RNCWebChromeClient(reactContext, webView) {
-        @Override
-        public Bitmap getDefaultVideoPoster() {
-          return Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
-        }
-      };
+    if (mWebChromeClient != null) {
+      mWebChromeClient.onHideCustomView();
     }
+
+    mWebChromeClient = new RNCWebChromeClient(reactContext, webView) {
+      @Override
+      public Bitmap getDefaultVideoPoster() {
+        return Bitmap.createBitmap(50, 50, Bitmap.Config.ARGB_8888);
+      }
+    };
     mWebChromeClient.setAllowsProtectedMedia(mAllowsProtectedMedia);
     webView.setWebChromeClient(mWebChromeClient);
   }

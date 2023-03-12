@@ -281,7 +281,6 @@ export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
   cacheMode?: CacheMode;
   allowFileAccess?: boolean;
   scalesPageToFit?: boolean;
-  allowsFullscreenVideo?: boolean;
   allowUniversalAccessFromFileURLs?: boolean;
   androidHardwareAccelerationDisabled?: boolean;
   androidLayerType?: AndroidLayerType;
@@ -833,11 +832,6 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
    * @platform android
    */
   mixedContentMode?: 'never' | 'always' | 'compatibility';
-
-  /**
-   * Sets ability to open fullscreen videos on Android devices.
-   */
-  allowsFullscreenVideo?: boolean;
 
   /**
    * Configuring Dark Theme

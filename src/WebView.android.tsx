@@ -45,7 +45,6 @@ const injectedJavaScriptForMainFrameOnly = true;
 const injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 const mediaPlaybackRequiresUserAction = true;
 // Android only
-const allowsFullscreenVideo = false;
 const allowFileAccess = false;
 const setSupportMultipleWindows = true;
 const mixedContentMode = 'never'
@@ -192,7 +191,6 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     javaScriptEnabled={javaScriptEnabled}
     thirdPartyCookiesEnabled={thirdPartyCookiesEnabled}
     scalesPageToFit={scalesPageToFit}
-    allowsFullscreenVideo={allowsFullscreenVideo}
     allowFileAccess={allowFileAccess}
     allowFileAccessFromFileURLs={allowFileAccessFromFileURLs}
     allowUniversalAccessFromFileURLs={allowUniversalAccessFromFileURLs}
