@@ -200,10 +200,8 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
     settings.setAllowFileAccess(false);
     settings.setAllowContentAccess(false);
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-      settings.setAllowFileAccessFromFileURLs(false);
-      setAllowUniversalAccessFromFileURLs(webView, false);
-    }
+    settings.setAllowFileAccessFromFileURLs(false);
+    setAllowUniversalAccessFromFileURLs(webView, false);
     setMixedContentMode(webView, "never");
 
     // Fixes broken full-screen modals/galleries due to body height being 0.
@@ -211,7 +209,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
       new LayoutParams(LayoutParams.MATCH_PARENT,
         LayoutParams.MATCH_PARENT));
 
-    if (ReactBuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+    if (ReactBuildConfig.DEBUG) {
       WebView.setWebContentsDebuggingEnabled(true);
     }
 
@@ -339,9 +337,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
   @ReactProp(name = "thirdPartyCookiesEnabled")
   public void setThirdPartyCookiesEnabled(WebView view, boolean enabled) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      CookieManager.getInstance().setAcceptThirdPartyCookies(view, enabled);
-    }
+    CookieManager.getInstance().setAcceptThirdPartyCookies(view, enabled);
   }
 
   @ReactProp(name = "textZoom")
@@ -373,10 +369,8 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   @ReactProp(name = "applicationNameForUserAgent")
   public void setApplicationNameForUserAgent(WebView view, @Nullable String applicationName) {
     if(applicationName != null) {
-      if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        String defaultUserAgent = WebSettings.getDefaultUserAgent(view.getContext());
-        mUserAgentWithApplicationName = defaultUserAgent + " " + applicationName;
-      }
+      String defaultUserAgent = WebSettings.getDefaultUserAgent(view.getContext());
+      mUserAgentWithApplicationName = defaultUserAgent + " " + applicationName;
     } else {
       mUserAgentWithApplicationName = null;
     }
@@ -388,8 +382,8 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
       view.getSettings().setUserAgentString(mUserAgent);
     } else if(mUserAgentWithApplicationName != null) {
       view.getSettings().setUserAgentString(mUserAgentWithApplicationName);
-    } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      // handle unsets of `userAgent` prop as long as device is >= API 17
+    } else {
+      // handle unsets of `userAgent` prop
       view.getSettings().setUserAgentString(WebSettings.getDefaultUserAgent(view.getContext()));
     }
   }
@@ -448,11 +442,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     }
 
     // Remove all previous cookies
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      CookieManager.getInstance().removeAllCookies(null);
-    } else {
-      CookieManager.getInstance().removeAllCookie();
-    }
+    CookieManager.getInstance().removeAllCookies(null);
 
     // Disable caching
     view.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -535,14 +525,12 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
   @ReactProp(name = "mixedContentMode")
   public void setMixedContentMode(WebView view, @Nullable String mixedContentMode) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (mixedContentMode == null || "never".equals(mixedContentMode)) {
-        view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
-      } else if ("always".equals(mixedContentMode)) {
-        view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-      } else if ("compatibility".equals(mixedContentMode)) {
-        view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
-      }
+    if (mixedContentMode == null || "never".equals(mixedContentMode)) {
+      view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
+    } else if ("always".equals(mixedContentMode)) {
+      view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+    } else if ("compatibility".equals(mixedContentMode)) {
+      view.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
     }
   }
 
@@ -1174,7 +1162,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
 
     @Override
     public void onHostResume() {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mVideoView != null && mVideoView.getSystemUiVisibility() != FULLSCREEN_SYSTEM_UI_VISIBILITY) {
+      if (mVideoView != null && mVideoView.getSystemUiVisibility() != FULLSCREEN_SYSTEM_UI_VISIBILITY) {
         mVideoView.setSystemUiVisibility(FULLSCREEN_SYSTEM_UI_VISIBILITY);
       }
     }
@@ -1376,17 +1364,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     }
 
     protected void evaluateJavascriptWithFallback(String script) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        evaluateJavascript(script, null);
-        return;
-      }
-
-      try {
-        loadUrl("javascript:" + URLEncoder.encode(script, "UTF-8"));
-      } catch (UnsupportedEncodingException e) {
-        // UTF-8 should always be supported
-        throw new RuntimeException(e);
-      }
+      evaluateJavascript(script, null);
     }
 
     public void callInjectedJavaScript() {

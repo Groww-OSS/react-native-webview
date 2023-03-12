@@ -108,13 +108,6 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
   @ReactMethod
   public void isFileUploadSupported(final Promise promise) {
     Boolean result = false;
-    int current = Build.VERSION.SDK_INT;
-    if (current >= Build.VERSION_CODES.LOLLIPOP) {
-      result = true;
-    }
-    if (current >= Build.VERSION_CODES.JELLY_BEAN && current <= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-      result = true;
-    }
     promise.resolve(result);
   }
 
@@ -212,7 +205,7 @@ public class RNCWebViewModule extends ReactContextBaseJavaModule implements Acti
     }
 
     // we have one file selected
-    if (data.getData() != null && resultCode == RESULT_OK && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (data.getData() != null && resultCode == RESULT_OK) {
       return WebChromeClient.FileChooserParams.parseResult(resultCode, data);
     }
 
