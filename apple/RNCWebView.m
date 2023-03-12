@@ -306,30 +306,23 @@ RCTAutoInsetsProtocol>
 {
   WKWebViewConfiguration *wkWebViewConfig = [WKWebViewConfiguration new];
   WKPreferences *prefs = [[WKPreferences alloc]init];
-  BOOL _prefsUsed = YES;
   if (!_javaScriptEnabled) {
     prefs.javaScriptEnabled = NO;
-    _prefsUsed = YES;
   }
-  if (_allowUniversalAccessFromFileURLs) {
-    [wkWebViewConfig setValue:@TRUE forKey:@"allowUniversalAccessFromFileURLs"];
-  }
-  if (_allowFileAccessFromFileURLs) {
-    [prefs setValue:@TRUE forKey:@"allowFileAccessFromFileURLs"];
-    _prefsUsed = YES;
-  }
+
+  // NOTE: defaults, recheck?
+  // [wkWebViewConfig setValue:@FALSE forKey:@"allowUniversalAccessFromFileURLs"];
+  // [prefs setValue:@FALSE forKey:@"allowFileAccessFromFileURLs"];
+
   [prefs setValue:@FALSE forKey:@"javaScriptCanOpenWindowsAutomatically"];
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 140500 /* iOS 14.5 */
   if (@available(iOS 14.5, *)) {
     if (!_textInteractionEnabled) {
       [prefs setValue:@FALSE forKey:@"textInteractionEnabled"];
-      _prefsUsed = YES;
     }
   }
 #endif
-  if (_prefsUsed) {
-    wkWebViewConfig.preferences = prefs;
-  }
+  wkWebViewConfig.preferences = prefs;
   if (_incognito) {
     wkWebViewConfig.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
   } else if (_cacheEnabled) {
@@ -624,17 +617,6 @@ RCTAutoInsetsProtocol>
   }
 }
 
-- (void)setAllowingReadAccessToURL:(NSString *)allowingReadAccessToURL
-{
-  if (![_allowingReadAccessToURL isEqualToString:allowingReadAccessToURL]) {
-    _allowingReadAccessToURL = [allowingReadAccessToURL copy];
-    
-    if (_webView != nil) {
-      [self visitSource];
-    }
-  }
-}
-
 #if !TARGET_OS_OSX
 - (void)setContentInset:(UIEdgeInsets)contentInset
 {
@@ -682,8 +664,10 @@ RCTAutoInsetsProtocol>
       [_webView loadRequest:request];
     }
     else {
-      NSURL* readAccessUrl = _allowingReadAccessToURL ? [RCTConvert NSURL:_allowingReadAccessToURL] : request.URL;
-      [_webView loadFileURL:request.URL allowingReadAccessToURL:readAccessUrl];
+      // WARNING: UNREACHABLE, non-host loads (file urls)
+      // Clear the webview
+      [_webView loadHTMLString:@"" baseURL:nil];
+      return;
     }
   }];
 }

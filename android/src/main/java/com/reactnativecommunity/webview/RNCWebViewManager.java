@@ -405,16 +405,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     view.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
   }
 
-  @ReactProp(name = "allowFileAccessFromFileURLs")
-  public void setAllowFileAccessFromFileURLs(WebView view, boolean allow) {
-    view.getSettings().setAllowFileAccessFromFileURLs(allow);
-  }
-
-  @ReactProp(name = "allowUniversalAccessFromFileURLs")
-  public void setAllowUniversalAccessFromFileURLs(WebView view, boolean allow) {
-    view.getSettings().setAllowUniversalAccessFromFileURLs(allow);
-  }
-
   @ReactProp(name = "saveFormDataDisabled")
   public void setSaveFormDataDisabled(WebView view, boolean disable) {
     view.getSettings().setSaveFormData(!disable);
@@ -564,13 +554,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     if (client != null && urlPrefixesForDefaultIntent != null) {
       client.setUrlPrefixesForDefaultIntent(urlPrefixesForDefaultIntent);
     }
-  }
-
-  @ReactProp(name = "allowFileAccess")
-  public void setAllowFileAccess(
-    WebView view,
-    @Nullable Boolean allowFileAccess) {
-    view.getSettings().setAllowFileAccess(allowFileAccess != null && allowFileAccess);
   }
 
   @ReactProp(name = "geolocationEnabled")

@@ -247,7 +247,6 @@ export interface BasicAuthCredential {
 }
 
 export interface CommonNativeWebViewProps extends ViewProps {
-  allowFileAccessFromFileURLs?: boolean;
   cacheEnabled?: boolean;
   incognito?: boolean;
   injectedJavaScript?: string;
@@ -279,9 +278,7 @@ export interface CommonNativeWebViewProps extends ViewProps {
 
 export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
   cacheMode?: CacheMode;
-  allowFileAccess?: boolean;
   scalesPageToFit?: boolean;
-  allowUniversalAccessFromFileURLs?: boolean;
   androidHardwareAccelerationDisabled?: boolean;
   androidLayerType?: AndroidLayerType;
   domStorageEnabled?: boolean;
@@ -323,12 +320,10 @@ export declare type MediaCapturePermissionGrantType =
 export declare type ContentMode = 'recommended' | 'mobile' | 'desktop';
 
 export interface IOSNativeWebViewProps extends CommonNativeWebViewProps {
-  allowingReadAccessToURL?: string;
   allowsBackForwardNavigationGestures?: boolean;
   allowsInlineMediaPlayback?: boolean;
   allowsAirPlayForMediaPlayback?: boolean;
   allowsLinkPreview?: boolean;
-  allowUniversalAccessFromFileURLs?: boolean;
   automaticallyAdjustContentInsets?: boolean;
   autoManageStatusBarEnabled?: boolean;
   bounces?: boolean;
@@ -551,33 +546,6 @@ export interface IOSWebViewProps extends WebViewSharedProps {
   keyboardDisplayRequiresUserAction?: boolean;
 
   /**
-   * A String value that indicates which URLs the WebView's file can then
-   * reference in scripts, AJAX requests, and CSS imports. This is only used
-   * for WebViews that are loaded with a source.uri set to a `'file://'` URL.
-   *
-   * If not provided, the default is to only allow read access to the URL
-   * provided in source.uri itself.
-   * @platform ios
-   */
-  allowingReadAccessToURL?: string;
-
-  /**
-   * Boolean that sets whether JavaScript running in the context of a file
-   * scheme URL should be allowed to access content from other file scheme URLs.
-   * Including accessing content from other file scheme URLs
-   * @platform ios
-   */
-  allowFileAccessFromFileURLs?: boolean;
-
-  /**
-   * Boolean that sets whether JavaScript running in the context of a file
-   * scheme URL should be allowed to access content from any origin.
-   * Including accessing content from other file scheme URLs
-   * @platform ios
-   */
-  allowUniversalAccessFromFileURLs?: boolean;
-
-  /**
    * Function that is invoked when the WebKit WebView content process gets terminated.
    * @platform ios
    */
@@ -730,28 +698,6 @@ export interface AndroidWebViewProps extends WebViewSharedProps {
    * @platform android
    */
   geolocationEnabled?: boolean;
-
-  /**
-   * Boolean that sets whether JavaScript running in the context of a file
-   * scheme URL should be allowed to access content from other file scheme URLs.
-   * Including accessing content from other file scheme URLs
-   * @platform android
-   */
-  allowFileAccessFromFileURLs?: boolean;
-
-  /**
-   * Boolean that sets whether JavaScript running in the context of a file
-   * scheme URL should be allowed to access content from any origin.
-   * Including accessing content from other file scheme URLs
-   * @platform android
-   */
-  allowUniversalAccessFromFileURLs?: boolean;
-
-  /**
-   * Sets whether the webview allow access to file system.
-   * @platform android
-   */
-  allowFileAccess?: boolean;
 
   /**
    * Used on Android only, controls whether form autocomplete data should be saved

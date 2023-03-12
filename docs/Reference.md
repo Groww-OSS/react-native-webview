@@ -55,16 +55,12 @@ This document lays out the current public properties and methods for the React N
 - [`setDisplayZoomControls`](Reference.md#setDisplayZoomControls)
 - [`directionalLockEnabled`](Reference.md#directionalLockEnabled)
 - [`geolocationEnabled`](Reference.md#geolocationenabled)
-- [`allowFileAccessFromFileURLs`](Reference.md#allowFileAccessFromFileURLs)
-- [`allowUniversalAccessFromFileURLs`](Reference.md#allowUniversalAccessFromFileURLs)
-- [`allowingReadAccessToURL`](Reference.md#allowingReadAccessToURL)
 - [`url`](Reference.md#url)
 - [`html`](Reference.md#html)
 - [`keyboardDisplayRequiresUserAction`](Reference.md#keyboardDisplayRequiresUserAction)
 - [`hideKeyboardAccessoryView`](Reference.md#hidekeyboardaccessoryview)
 - [`allowsBackForwardNavigationGestures`](Reference.md#allowsbackforwardnavigationgestures)
 - [`incognito`](Reference.md#incognito)
-- [`allowFileAccess`](Reference.md#allowFileAccess)
 - [`saveFormDataDisabled`](Reference.md#saveFormDataDisabled)
 - [`cacheEnabled`](Reference.md#cacheEnabled)
 - [`cacheMode`](Reference.md#cacheMode)
@@ -1121,36 +1117,6 @@ Set whether Geolocation is enabled in the `WebView`. The default value is `false
 
 ---
 
-### `allowFileAccessFromFileURLs`[⬆](#props-index)<!-- Link generated with jump2header -->
-
-Boolean that sets whether JavaScript running in the context of a file scheme URL should be allowed to access content from other file scheme URLs. The default value is `false`.
-
-| Type | Required | Platform            |
-| ---- | -------- | ------------------- |
-| bool | No       | iOS, Android, macOS |
-
----
-
-### `allowUniversalAccessFromFileURLs`[⬆](#props-index)<!-- Link generated with jump2header -->
-
-Boolean that sets whether JavaScript running in the context of a file scheme URL should be allowed to access content from any origin. Including accessing content from other file scheme URLs. The default value is `false`.
-
-| Type | Required | Platform             |
-| ---- | -------- | -------------------- |
-| bool | No       | iOS, Android, macOS  |
-
----
-
-### `allowingReadAccessToURL`[⬆](#props-index)<!-- Link generated with jump2header -->
-
-A String value that indicates which URLs the WebView's file can then reference in scripts, AJAX requests, and CSS imports. This is only used in for WebViews that are loaded with a source.uri set to a `'file://'` URL. If not provided, the default is to only allow read access to the URL provided in source.uri itself.
-
-| Type   | Required | Platform      |
-| ------ | -------- | ------------- |
-| string | No       | iOS and macOS |
-
----
-
 ### `url`[⬆](#props-index)<!-- Link generated with jump2header -->
 
 **Deprecated.** Use the `source` prop instead.
@@ -1208,16 +1174,6 @@ Does not store any data within the lifetime of the WebView.
 | Type    | Required | Platform            |
 | ------- | -------- | ------------------- |
 | boolean | No       | iOS, Android, macOS |
-
----
-
-### `allowFileAccess`[⬆](#props-index)<!-- Link generated with jump2header -->
-
-If true, this will allow access to the file system via `file://` URI's. The default value is `false`.
-
-| Type    | Required | Platform |
-| ------- | -------- | -------- |
-| boolean | No       | Android  |
 
 ---
 

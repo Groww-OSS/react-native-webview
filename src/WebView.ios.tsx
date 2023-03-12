@@ -55,8 +55,6 @@ const useWarnIfChanges = <T extends unknown>(value: T, name: string) => {
 /**
  * Harcoded defaults for security.
  */
-const allowFileAccessFromFileURLs = false;
-const allowUniversalAccessFromFileURLs = false;
 const injectedJavaScriptForMainFrameOnly = true;
 const injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 const mediaPlaybackRequiresUserAction = true;
@@ -170,8 +168,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
     <NativeWebView
       key="webViewKey"
       {...otherProps}
-      allowFileAccessFromFileURLs={allowFileAccessFromFileURLs}
-      allowUniversalAccessFromFileURLs={allowUniversalAccessFromFileURLs}
       enableApplePay={enableApplePay}
       javaScriptEnabled={javaScriptEnabled}
       cacheEnabled={cacheEnabled}

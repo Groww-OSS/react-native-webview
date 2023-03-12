@@ -39,13 +39,10 @@ let uniqueRef = 0;
 /**
  * Harcoded default for security.
  */
-const allowFileAccessFromFileURLs = false;
-const allowUniversalAccessFromFileURLs = false;
 const injectedJavaScriptForMainFrameOnly = true;
 const injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 const mediaPlaybackRequiresUserAction = true;
 // Android only
-const allowFileAccess = false;
 const setSupportMultipleWindows = true;
 const mixedContentMode = 'never'
 
@@ -191,9 +188,6 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     javaScriptEnabled={javaScriptEnabled}
     thirdPartyCookiesEnabled={thirdPartyCookiesEnabled}
     scalesPageToFit={scalesPageToFit}
-    allowFileAccess={allowFileAccess}
-    allowFileAccessFromFileURLs={allowFileAccessFromFileURLs}
-    allowUniversalAccessFromFileURLs={allowUniversalAccessFromFileURLs}
     saveFormDataDisabled={saveFormDataDisabled}
     cacheEnabled={cacheEnabled}
     androidHardwareAccelerationDisabled={androidHardwareAccelerationDisabled}
