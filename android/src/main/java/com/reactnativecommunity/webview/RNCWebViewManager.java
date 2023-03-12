@@ -201,6 +201,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     settings.setAllowFileAccess(false);
     settings.setAllowContentAccess(false);
     settings.setAllowFileAccessFromFileURLs(false);
+    settings.setJavaScriptCanOpenWindowsAutomatically(false);
     setAllowUniversalAccessFromFileURLs(webView, false);
     setMixedContentMode(webView, "never");
 
@@ -392,11 +393,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
   @ReactProp(name = "mediaPlaybackRequiresUserAction")
   public void setMediaPlaybackRequiresUserAction(WebView view, boolean requires) {
     view.getSettings().setMediaPlaybackRequiresUserGesture(requires);
-  }
-
-  @ReactProp(name = "javaScriptCanOpenWindowsAutomatically")
-  public void setJavaScriptCanOpenWindowsAutomatically(WebView view, boolean enabled) {
-    view.getSettings().setJavaScriptCanOpenWindowsAutomatically(false);
   }
 
   @ReactProp(name = "saveFormDataDisabled")
