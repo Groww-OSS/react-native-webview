@@ -202,7 +202,7 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     settings.setAllowContentAccess(false);
     settings.setAllowFileAccessFromFileURLs(false);
     settings.setJavaScriptCanOpenWindowsAutomatically(false);
-    setAllowUniversalAccessFromFileURLs(webView, false);
+    settings.setAllowUniversalAccessFromFileURLs(false);
     setMixedContentMode(webView, "never");
 
     // Fixes broken full-screen modals/galleries due to body height being 0.
