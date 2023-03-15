@@ -31,6 +31,8 @@ const passesWhitelist = (
   url: string,
 ) => {
   const origin = extractOrigin(url);
+  if (!origin) return false;
+  if (origin !== new URL(url).origin) return null;
   return compiledWhitelist.some(x => new RegExp(x).test(origin));
 };
 
