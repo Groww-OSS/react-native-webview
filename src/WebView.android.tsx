@@ -90,7 +90,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     }
   }, []);
 
-  const { onLoadingStart, onShouldStartLoadWithRequest, onMessage, viewState, setViewState, lastErrorEvent, onHttpError, onLoadingError, onLoadingFinish, onLoadingProgress, onRenderProcessGone } = useWebWiewLogic({
+  const { onLoadingStart, onShouldStartLoadWithRequest, onMessage, viewState, setViewState, lastErrorEvent, onHttpError, onLoadingError, onLoadingFinish, onLoadingProgress, onRenderProcessGone, passesWhitelist } = useWebWiewLogic({
     onNavigationStateChange,
     onLoad,
     onError,
@@ -157,6 +157,10 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     } else if (source.method === 'GET' && source.body) {
       console.warn('WebView: `source.body` is not supported when using GET.');
     }
+  }
+
+  if (typeof source === "object" && 'uri' in source && !passesWhitelist(source.uri)){
+    source = {uri: "about:blank"};
   }
 
 

@@ -26,7 +26,7 @@ const extractOrigin = (url: string): string => {
 const originWhitelistToRegex = (originWhitelist: string): string =>
   `^${escapeStringRegexp(originWhitelist).replace(/\\\*/g, '.*')}$`;
 
-const passesWhitelist = (
+const _passesWhitelist = (
   compiledWhitelist: readonly string[],
   url: string,
 ) => {
@@ -54,7 +54,7 @@ const createOnShouldStartLoadWithRequest = (
     let shouldStart = true;
     const { url, lockIdentifier } = nativeEvent;
 
-    if (!passesWhitelist(compileWhitelist(originWhitelist), url)) {
+    if (!_passesWhitelist(compileWhitelist(originWhitelist), url)) {
       shouldStart = false;
     } else if (onShouldStartLoadWithRequest) {
       shouldStart = onShouldStartLoadWithRequest(nativeEvent);
@@ -201,6 +201,10 @@ export const useWebWiewLogic = ({
     )
   , [originWhitelist, onShouldStartLoadWithRequestProp, onShouldStartLoadWithRequestCallback])
 
+  const passesWhitelist = (url: string) => {
+    return _passesWhitelist(compileWhitelist(originWhitelist), url);
+  }
+
   return {
     onShouldStartLoadWithRequest,
     onLoadingStart,
@@ -211,6 +215,7 @@ export const useWebWiewLogic = ({
     onRenderProcessGone,
     onContentProcessDidTerminate,
     onMessage,
+    passesWhitelist,
     viewState,
     setViewState,
     lastErrorEvent,
