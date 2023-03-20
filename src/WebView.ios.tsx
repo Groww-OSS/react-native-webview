@@ -19,6 +19,7 @@ import {
   DecelerationRateConstant,
   NativeWebViewIOS,
   ViewManager,
+  WebViewNativeEvent,
 } from './WebViewTypes';
 
 import styles from './WebView.styles';
@@ -120,6 +121,8 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
     onShouldStartLoadWithRequestProp,
     onShouldStartLoadWithRequestCallback,
     onContentProcessDidTerminateProp,
+    validateMeta: (event: WebViewNativeEvent): WebViewNativeEvent => event, // TODO
+    validateData: (data: object) => data, // TODO
   });
 
   useImperativeHandle(ref, () => ({

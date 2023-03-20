@@ -8,11 +8,13 @@ import {
   WebViewErrorEvent,
   WebViewHttpErrorEvent,
   WebViewMessageEvent,
+  WebViewMessage,
   WebViewNavigation,
   WebViewNavigationEvent,
   WebViewProgressEvent,
   WebViewRenderProcessGoneEvent,
   WebViewTerminatedEvent,
+  WebViewNativeEvent,
 } from './WebViewTypes';
 import styles from './WebView.styles';
 
@@ -98,6 +100,7 @@ export {
   defaultRenderError,
 };
 
+
 export const useWebWiewLogic = ({
   startInLoadingState,
   onNavigationStateChange,
@@ -113,6 +116,8 @@ export const useWebWiewLogic = ({
   originWhitelist,
   onShouldStartLoadWithRequestProp,
   onShouldStartLoadWithRequestCallback,
+  validateMeta,
+  validateData,
 }: {
   startInLoadingState?: boolean
   onNavigationStateChange?: (event: WebViewNavigation) => void;
@@ -122,18 +127,25 @@ export const useWebWiewLogic = ({
   onLoadEnd?: (event: WebViewNavigationEvent | WebViewErrorEvent) => void;
   onError?: (event: WebViewErrorEvent) => void;
   onHttpErrorProp?: (event: WebViewHttpErrorEvent) => void;
-  onMessageProp?: (event: WebViewMessageEvent) => void;
+  onMessageProp?: (event: WebViewMessage) => void;
   onRenderProcessGoneProp?: (event: WebViewRenderProcessGoneEvent) => void;
   onContentProcessDidTerminateProp?: (event: WebViewTerminatedEvent) => void;
   originWhitelist: readonly string[];
   onShouldStartLoadWithRequestProp?: OnShouldStartLoadWithRequest;
   onShouldStartLoadWithRequestCallback: (shouldStart: boolean, url: string, lockIdentifier?: number | undefined) => void;
+  validateMeta: (event: WebViewNativeEvent) => WebViewNativeEvent;
+  validateData: (data: object) => object;
 }) => {
 
   const [viewState, setViewState] = useState<'IDLE' | 'LOADING' | 'ERROR'>(startInLoadingState ? "LOADING" : "IDLE");
   const [lastErrorEvent, setLastErrorEvent] = useState<WebViewError | null>(null);
   const startUrl = useRef<string | null>(null)
 
+  const passesWhitelist = (url: string) => {
+    return _passesWhitelist(compileWhitelist(originWhitelist), url);
+  }
+
+  const passesWhitelistUse = useCallback(passesWhitelist, [originWhitelist])
 
   const updateNavigationState = useCallback((event: WebViewNavigationEvent) => {
     onNavigationStateChange?.(event.nativeEvent);
@@ -181,17 +193,35 @@ export const useWebWiewLogic = ({
     onLoad?.(event);
     onLoadEnd?.(event);
     const { nativeEvent: { url } } = event;
+
+    if (!passesWhitelistUse(url)) return;
+
     // on Android, only if url === startUrl
     if (Platform.OS !== "android" || url === startUrl.current) {
       setViewState('IDLE');
     }
     // !on Android, only if url === startUrl
     updateNavigationState(event);
-  }, [onLoad, onLoadEnd, updateNavigationState]);
+  }, [onLoad, onLoadEnd, updateNavigationState, passesWhitelistUse]);
 
   const onMessage = useCallback((event: WebViewMessageEvent) => {
-    onMessageProp?.(event);
-  }, [onMessageProp]);
+    const { nativeEvent } = event;
+    if (!passesWhitelistUse(nativeEvent.url)) return;
+
+    // TODO: can/should we perform any other validation?
+
+    const data = JSON.stringify(validateData(JSON.parse(nativeEvent.data)));
+    const meta = validateMeta({
+      url: String(nativeEvent.url),
+      loading: Boolean(nativeEvent.loading),
+      title: String(nativeEvent.title),
+      canGoBack: Boolean(nativeEvent.canGoBack),
+      canGoForward: Boolean(nativeEvent.canGoForward),
+      lockIdentifier: Number(nativeEvent.lockIdentifier),
+    });
+
+    onMessageProp?.({ ...meta, data });
+  }, [onMessageProp, passesWhitelistUse, validateData, validateMeta]);
 
   const onLoadingProgress = useCallback((event: WebViewProgressEvent) => {
     const { nativeEvent: { progress } } = event;
@@ -209,10 +239,6 @@ export const useWebWiewLogic = ({
       onShouldStartLoadWithRequestProp,
     )
   , [originWhitelist, onShouldStartLoadWithRequestProp, onShouldStartLoadWithRequestCallback])
-
-  const passesWhitelist = (url: string) => {
-    return _passesWhitelist(compileWhitelist(originWhitelist), url);
-  }
 
   return {
     onShouldStartLoadWithRequest,

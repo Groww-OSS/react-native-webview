@@ -923,7 +923,7 @@ export interface WebViewSharedProps extends ViewProps {
    * `window.ReactNativeWebView.postMessage` accepts one argument, `data`, which will be
    * available on the event object, `event.nativeEvent.data`. `data` must be a string.
    */
-  onMessage?: (event: WebViewMessageEvent) => void;
+  onMessage?: (event: WebViewMessage) => void;
 
   /**
    * Function that is invoked when the `WebView` is loading.

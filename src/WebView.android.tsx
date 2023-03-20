@@ -21,6 +21,7 @@ import {
 import {
   AndroidWebViewProps,
   NativeWebViewAndroid,
+  WebViewNativeEvent,
 } from './WebViewTypes';
 
 import styles from './WebView.styles';
@@ -104,6 +105,8 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     originWhitelist,
     onShouldStartLoadWithRequestProp,
     onShouldStartLoadWithRequestCallback,
+    validateMeta: (event: WebViewNativeEvent): WebViewNativeEvent => event, // TODO
+    validateData: (data: object) => data, // TODO
   })
 
   useImperativeHandle(ref, () => ({
