@@ -54,7 +54,6 @@ UIScrollViewDelegate,
 #endif // !TARGET_OS_OSX
 RCTAutoInsetsProtocol>
 
-@property (nonatomic, copy) RCTDirectEventBlock onFileDownload;
 @property (nonatomic, copy) RCTDirectEventBlock onLoadingStart;
 @property (nonatomic, copy) RCTDirectEventBlock onLoadingFinish;
 @property (nonatomic, copy) RCTDirectEventBlock onLoadingError;
@@ -1146,15 +1145,8 @@ RCTAutoInsetsProtocol>
       }
       BOOL isAttachment = disposition != nil && [disposition hasPrefix:@"attachment"];
       if (isAttachment || !navigationResponse.canShowMIMEType) {
-        if (_onFileDownload) {
-          policy = WKNavigationResponsePolicyCancel;
-          
-          NSMutableDictionary<NSString *, id> *downloadEvent = [self baseEvent];
-          [downloadEvent addEntriesFromDictionary: @{
-            @"downloadUrl": (response.URL).absoluteString,
-          }];
-          _onFileDownload(downloadEvent);
-        }
+        policy = WKNavigationResponsePolicyCancel;
+        // File downloads are cancelled
       }
     }
   }

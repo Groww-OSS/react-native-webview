@@ -61,7 +61,6 @@ const allowsInlineMediaPlayback = true;
 const useSharedProcessPool = false;
 const sharedCookiesEnabled = false;
 const enableApplePay = false;
-const onFileDownload = () => console.error('tried to download file')
 const dataDetectorTypes = 'none';
 
 const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
@@ -171,7 +170,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
       onLoadingError={onLoadingError}
       onLoadingFinish={onLoadingFinish}
       onLoadingProgress={onLoadingProgress}
-      onFileDownload={onFileDownload}
       onLoadingStart={onLoadingStart}
       onMessage={onMessage}
       onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
