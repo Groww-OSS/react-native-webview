@@ -58,7 +58,6 @@ const useWarnIfChanges = <T extends unknown>(value: T, name: string) => {
 const mediaPlaybackRequiresUserAction = true;
 // iOS only configs
 const allowsInlineMediaPlayback = true;
-const allowsAirPlayForMediaPlayback = false;
 const useSharedProcessPool = false;
 const sharedCookiesEnabled = false;
 const enableApplePay = false;
@@ -134,7 +133,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
 
 
   useWarnIfChanges(allowsInlineMediaPlayback, 'allowsInlineMediaPlayback');
-  useWarnIfChanges(allowsAirPlayForMediaPlayback, 'allowsAirPlayForMediaPlayback');
   useWarnIfChanges(incognito, 'incognito');
   useWarnIfChanges(mediaPlaybackRequiresUserAction, 'mediaPlaybackRequiresUserAction');
   useWarnIfChanges(dataDetectorTypes, 'dataDetectorTypes');
@@ -182,7 +180,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
       onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
       injectedJavaScript={injectedJavaScript}
       injectedJavaScriptBeforeContentLoaded={injectedJavaScriptBeforeContentLoaded}
-      allowsAirPlayForMediaPlayback={allowsAirPlayForMediaPlayback}
       allowsInlineMediaPlayback={allowsInlineMediaPlayback}
       incognito={incognito}
       mediaPlaybackRequiresUserAction={mediaPlaybackRequiresUserAction}

@@ -310,7 +310,6 @@ export declare type ContentMode = 'recommended' | 'mobile' | 'desktop';
 export interface IOSNativeWebViewProps extends CommonNativeWebViewProps {
   allowsBackForwardNavigationGestures?: boolean;
   allowsInlineMediaPlayback?: boolean;
-  allowsAirPlayForMediaPlayback?: boolean;
   allowsLinkPreview?: boolean;
   automaticallyAdjustContentInsets?: boolean;
   autoManageStatusBarEnabled?: boolean;
@@ -451,11 +450,6 @@ export interface IOSWebViewProps extends WebViewSharedProps {
    * @platform ios
    */
   allowsInlineMediaPlayback?: boolean;
-  /**
-   * A Boolean value indicating whether AirPlay is allowed. The default value is `false`.
-   * @platform ios
-   */
-  allowsAirPlayForMediaPlayback?: boolean;
   /**
    * Hide the accessory view when the keyboard is open. Default is false to be
    * backward compatible.

@@ -355,7 +355,7 @@ RCTAutoInsetsProtocol>
   [self resetupScripts:wkWebViewConfig];
   
   if(@available(ios 9.0, *)) {
-    wkWebViewConfig.allowsAirPlayForMediaPlayback = _allowsAirPlayForMediaPlayback;
+    wkWebViewConfig.allowsAirPlayForMediaPlayback = NO;
   }
   
 #if !TARGET_OS_OSX
