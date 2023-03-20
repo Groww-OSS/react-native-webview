@@ -1,5 +1,5 @@
 name: 'Detox CI Tests'
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   tests:

@@ -5,6 +5,7 @@ module.exports = {
   plugins: ['react', 'react-native', 'import', '@typescript-eslint'],
   rules: {
     'no-console': 'off',
+    'no-underscore-dangle': 'off',
     // Lines will be broken before binary operators
     'operator-linebreak': ['error', 'before'],
     // Allow imports from dev and peer dependencies

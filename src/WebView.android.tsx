@@ -170,6 +170,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   }
 
   if (typeof source === "object" && 'uri' in source && !passesWhitelist(source.uri)){
+    // eslint-disable-next-line
     source = {uri: "about:blank"};
   }
 
