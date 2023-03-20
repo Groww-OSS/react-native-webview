@@ -119,11 +119,6 @@ export interface WebViewError extends WebViewNativeEvent {
   description: string;
 }
 
-export interface WebViewHttpError extends WebViewNativeEvent {
-  description: string;
-  statusCode: number;
-}
-
 export type WebViewEvent = NativeSyntheticEvent<WebViewNativeEvent>;
 
 export type WebViewProgressEvent =
@@ -139,8 +134,6 @@ export type FileDownloadEvent = NativeSyntheticEvent<FileDownload>;
 export type WebViewMessageEvent = NativeSyntheticEvent<WebViewMessage>;
 
 export type WebViewErrorEvent = NativeSyntheticEvent<WebViewError>;
-
-export type WebViewHttpErrorEvent = NativeSyntheticEvent<WebViewHttpError>;
 
 export type WebViewScrollEvent = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -249,7 +242,6 @@ export interface CommonNativeWebViewProps extends ViewProps {
   onLoadingFinish: (event: WebViewNavigationEvent) => void;
   onLoadingProgress: (event: WebViewProgressEvent) => void;
   onLoadingStart: (event: WebViewNavigationEvent) => void;
-  onHttpError: (event: WebViewHttpErrorEvent) => void;
   onMessage: (event: WebViewMessageEvent) => void;
   onShouldStartLoadWithRequest: (event: ShouldStartLoadRequestEvent) => void;
   showsHorizontalScrollIndicator?: boolean;
@@ -856,12 +848,6 @@ export interface WebViewSharedProps extends ViewProps {
    * Function that is invoked when the `WebView` load fails.
    */
   onError?: (event: WebViewErrorEvent) => void;
-
-  /**
-   * Function that is invoked when the `WebView` receives an error status code.
-   * Works on iOS and Android (minimum API level 23).
-   */
-  onHttpError?: (event: WebViewHttpErrorEvent) => void;
 
   /**
    * Function that is invoked when the webview calls `window.ReactNativeWebView.postMessage`.

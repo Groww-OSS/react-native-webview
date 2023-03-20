@@ -6,7 +6,6 @@ import {
   ShouldStartLoadRequestEvent,
   WebViewError,
   WebViewErrorEvent,
-  WebViewHttpErrorEvent,
   WebViewMessageEvent,
   WebViewMessage,
   WebViewNavigationEvent,
@@ -104,7 +103,6 @@ export const useWebWiewLogic = ({
   onLoad,
   onLoadEnd,
   onError,
-  onHttpErrorProp,
   onMessageProp,
   originWhitelist,
   onShouldStartLoadWithRequestProp,
@@ -117,7 +115,6 @@ export const useWebWiewLogic = ({
   onLoad?: (event: WebViewNavigationEvent) => void;
   onLoadEnd?: (event: WebViewNavigationEvent | WebViewErrorEvent) => void;
   onError?: (event: WebViewErrorEvent) => void;
-  onHttpErrorProp?: (event: WebViewHttpErrorEvent) => void;
   onMessageProp?: (event: WebViewMessage) => void;
   originWhitelist: readonly string[];
   onShouldStartLoadWithRequestProp?: OnShouldStartLoadWithRequest;
@@ -165,10 +162,6 @@ export const useWebWiewLogic = ({
     setViewState('ERROR');
     setLastErrorEvent(event.nativeEvent);
   }, [onError, onLoadEnd]);
-
-  const onHttpError = useCallback((event: WebViewHttpErrorEvent) => {
-    onHttpErrorProp?.(event);
-  }, [onHttpErrorProp]);
 
   const onLoadingFinish = useCallback((event: WebViewNavigationEvent) => {
     onLoad?.(event);
@@ -220,7 +213,6 @@ export const useWebWiewLogic = ({
     onLoadingProgress,
     onLoadingError,
     onLoadingFinish,
-    onHttpError,
     onMessage,
     passesWhitelist,
     viewState,

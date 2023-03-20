@@ -60,7 +60,6 @@ RCTAutoInsetsProtocol>
 @property (nonatomic, copy) RCTDirectEventBlock onLoadingError;
 @property (nonatomic, copy) RCTDirectEventBlock onLoadingProgress;
 @property (nonatomic, copy) RCTDirectEventBlock onShouldStartLoadWithRequest;
-@property (nonatomic, copy) RCTDirectEventBlock onHttpError;
 @property (nonatomic, copy) RCTDirectEventBlock onMessage;
 @property (nonatomic, copy) RCTDirectEventBlock onScroll;
 @property (nonatomic, copy) RCTDirectEventBlock onContentProcessDidTerminate;
@@ -1136,20 +1135,10 @@ RCTAutoInsetsProtocol>
                     decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler
 {
   WKNavigationResponsePolicy policy = WKNavigationResponsePolicyAllow;
-  if (_onHttpError && navigationResponse.forMainFrame) {
+  if (navigationResponse.forMainFrame) {
     if ([navigationResponse.response isKindOfClass:[NSHTTPURLResponse class]]) {
       NSHTTPURLResponse *response = (NSHTTPURLResponse *)navigationResponse.response;
       NSInteger statusCode = response.statusCode;
-      
-      if (statusCode >= 400) {
-        NSMutableDictionary<NSString *, id> *httpErrorEvent = [self baseEvent];
-        [httpErrorEvent addEntriesFromDictionary: @{
-          @"url": response.URL.absoluteString,
-          @"statusCode": @(statusCode)
-        }];
-        
-        _onHttpError(httpErrorEvent);
-      }
       
       NSString *disposition = nil;
       if (@available(iOS 13, *)) {

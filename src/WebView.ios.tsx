@@ -76,7 +76,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   onError,
   onLoad,
   onLoadEnd,
-  onHttpError: onHttpErrorProp,
   onMessage: onMessageProp,
   renderLoading,
   renderError,
@@ -102,10 +101,9 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
     viewManager.startLoadWithResult(!!shouldStart, lockIdentifier);
   }, []);
 
-  const { onLoadingStart, onShouldStartLoadWithRequest, onMessage, viewState, setViewState, lastErrorEvent, onHttpError, onLoadingError, onLoadingFinish, onLoadingProgress } = useWebWiewLogic({
+  const { onLoadingStart, onShouldStartLoadWithRequest, onMessage, viewState, setViewState, lastErrorEvent, onLoadingError, onLoadingFinish, onLoadingProgress } = useWebWiewLogic({
     onLoad,
     onError,
-    onHttpErrorProp,
     onLoadEnd,
     onLoadStart,
     onMessageProp,
@@ -175,7 +173,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
       onLoadingProgress={onLoadingProgress}
       onFileDownload={onFileDownload}
       onLoadingStart={onLoadingStart}
-      onHttpError={onHttpError}
       onMessage={onMessage}
       onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
       injectedJavaScript={injectedJavaScript}
