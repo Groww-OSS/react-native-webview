@@ -242,8 +242,6 @@ export interface CommonNativeWebViewProps extends ViewProps {
   incognito?: boolean;
   injectedJavaScript?: string;
   injectedJavaScriptBeforeContentLoaded?: string;
-  injectedJavaScriptForMainFrameOnly?: boolean;
-  injectedJavaScriptBeforeContentLoadedForMainFrameOnly?: boolean;
   mediaPlaybackRequiresUserAction?: boolean;
   messagingEnabled: boolean;
   onScroll?: (event: WebViewScrollEvent) => void;
@@ -328,8 +326,6 @@ export interface IOSNativeWebViewProps extends CommonNativeWebViewProps {
   pagingEnabled?: boolean;
   scrollEnabled?: boolean;
   useSharedProcessPool?: boolean;
-  injectedJavaScriptForMainFrameOnly?: boolean;
-  injectedJavaScriptBeforeContentLoadedForMainFrameOnly?: boolean;
   onFileDownload?: (event: FileDownloadEvent) => void;
   limitsNavigationsToAppBoundDomains?: boolean;
   sharedCookiesEnabled?: boolean;
@@ -533,20 +529,6 @@ export interface IOSWebViewProps extends WebViewSharedProps {
    * @platform ios
    */
   keyboardDisplayRequiresUserAction?: boolean;
-
-  /**
-   * If `true` (default), loads the `injectedJavaScript` only into the main frame.
-   * If `false`, loads it into all frames (e.g. iframes).
-   * @platform ios
-   */
-  injectedJavaScriptForMainFrameOnly?: boolean;
-
-  /**
-   * If `true` (default), loads the `injectedJavaScriptBeforeContentLoaded` only into the main frame.
-   * If `false`, loads it into all frames (e.g. iframes).
-   * @platform ios
-   */
-  injectedJavaScriptBeforeContentLoadedForMainFrameOnly?: boolean;
 
   /**
    * Boolean value that determines whether a pull to refresh gesture is
@@ -913,18 +895,6 @@ export interface WebViewSharedProps extends ViewProps {
    * once the webview is initialized but before the view loads any content.
    */
   injectedJavaScriptBeforeContentLoaded?: string;
-
-  /**
-   * If `true` (default; mandatory for Android), loads the `injectedJavaScript` only into the main frame.
-   * If `false` (only supported on iOS and macOS), loads it into all frames (e.g. iframes).
-   */
-  injectedJavaScriptForMainFrameOnly?: boolean;
-
-  /**
-   * If `true` (default; mandatory for Android), loads the `injectedJavaScriptBeforeContentLoaded` only into the main frame.
-   * If `false` (only supported on iOS and macOS), loads it into all frames (e.g. iframes).
-   */
-  injectedJavaScriptBeforeContentLoadedForMainFrameOnly?: boolean;
 
   /**
    * Boolean value that determines whether a horizontal scroll indicator is

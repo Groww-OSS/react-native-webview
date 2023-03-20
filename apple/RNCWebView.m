@@ -122,9 +122,7 @@ RCTAutoInsetsProtocol>
     _savedStatusBarHidden = RCTSharedApplication().statusBarHidden;
 #endif // !TARGET_OS_OSX
     _injectedJavaScript = nil;
-    _injectedJavaScriptForMainFrameOnly = YES;
     _injectedJavaScriptBeforeContentLoaded = nil;
-    _injectedJavaScriptBeforeContentLoadedForMainFrameOnly = YES;
     
 #if defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 110000 /* __IPHONE_11_0 */
     _savedContentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -1365,7 +1363,7 @@ didFinishNavigation:(WKNavigation *)navigation
   
   self.atEndScript = source == nil ? nil : [[WKUserScript alloc] initWithSource:source
                                                                   injectionTime:WKUserScriptInjectionTimeAtDocumentEnd
-                                                               forMainFrameOnly:_injectedJavaScriptForMainFrameOnly];
+                                                               forMainFrameOnly:YES];
   
   if(_webView != nil){
     [self resetupScripts:_webView.configuration];
@@ -1377,21 +1375,11 @@ didFinishNavigation:(WKNavigation *)navigation
   
   self.atStartScript = source == nil ? nil : [[WKUserScript alloc] initWithSource:source
                                                                     injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-                                                                 forMainFrameOnly:_injectedJavaScriptBeforeContentLoadedForMainFrameOnly];
+                                                                 forMainFrameOnly:YES];
   
   if(_webView != nil){
     [self resetupScripts:_webView.configuration];
   }
-}
-
-- (void)setInjectedJavaScriptForMainFrameOnly:(BOOL)mainFrameOnly {
-  _injectedJavaScriptForMainFrameOnly = mainFrameOnly;
-  [self setInjectedJavaScript:_injectedJavaScript];
-}
-
-- (void)setInjectedJavaScriptBeforeContentLoadedForMainFrameOnly:(BOOL)mainFrameOnly {
-  _injectedJavaScriptBeforeContentLoadedForMainFrameOnly = mainFrameOnly;
-  [self setInjectedJavaScriptBeforeContentLoaded:_injectedJavaScriptBeforeContentLoaded];
 }
 
 - (void)setMessagingEnabled:(BOOL)messagingEnabled {
@@ -1410,9 +1398,6 @@ didFinishNavigation:(WKNavigation *)navigation
       "};", MessageHandlerName, MessageHandlerName
     ]
     injectionTime:WKUserScriptInjectionTimeAtDocumentStart
-    /* TODO: For a separate (minor) PR: use logic like this (as react-native-wkwebview does) so that messaging can be used in all frames if desired.
-     *       I am keeping it as YES for consistency with previous behaviour. */
-    // forMainFrameOnly:_messagingEnabledForMainFrameOnly
     forMainFrameOnly:YES
   ] :
   nil;

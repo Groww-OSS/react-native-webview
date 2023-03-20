@@ -39,8 +39,6 @@ let uniqueRef = 0;
 /**
  * Harcoded default for security.
  */
-const injectedJavaScriptForMainFrameOnly = true;
-const injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 const mediaPlaybackRequiresUserAction = true;
 // Android only
 const setSupportMultipleWindows = true;
@@ -177,9 +175,6 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     onHttpError={onHttpError}
     onMessage={onMessage}
     onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
-
-    injectedJavaScriptForMainFrameOnly={injectedJavaScriptForMainFrameOnly}
-    injectedJavaScriptBeforeContentLoadedForMainFrameOnly={injectedJavaScriptBeforeContentLoadedForMainFrameOnly}
     
     ref={webViewRef}
     // TODO: find a better way to type this.

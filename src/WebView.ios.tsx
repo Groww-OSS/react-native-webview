@@ -55,8 +55,6 @@ const useWarnIfChanges = <T extends unknown>(value: T, name: string) => {
 /**
  * Harcoded defaults for security.
  */
-const injectedJavaScriptForMainFrameOnly = true;
-const injectedJavaScriptBeforeContentLoadedForMainFrameOnly = true;
 const mediaPlaybackRequiresUserAction = true;
 // iOS only configs
 const allowsInlineMediaPlayback = true;
@@ -184,8 +182,6 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
       onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
       injectedJavaScript={injectedJavaScript}
       injectedJavaScriptBeforeContentLoaded={injectedJavaScriptBeforeContentLoaded}
-      injectedJavaScriptForMainFrameOnly={injectedJavaScriptForMainFrameOnly}
-      injectedJavaScriptBeforeContentLoadedForMainFrameOnly={injectedJavaScriptBeforeContentLoadedForMainFrameOnly}
       allowsAirPlayForMediaPlayback={allowsAirPlayForMediaPlayback}
       allowsInlineMediaPlayback={allowsInlineMediaPlayback}
       incognito={incognito}
