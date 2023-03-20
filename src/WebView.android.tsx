@@ -21,7 +21,6 @@ import {
 import {
   AndroidWebViewProps,
   NativeWebViewAndroid,
-  WebViewNativeEvent,
 } from './WebViewTypes';
 
 import styles from './WebView.styles';
@@ -76,6 +75,8 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   containerStyle,
   source,
   onShouldStartLoadWithRequest: onShouldStartLoadWithRequestProp,
+  validateMeta,
+  validateData,
   ...otherProps
 }, ref) => {
   const messagingModuleName = useRef<string>(`WebViewMessageHandler${uniqueRef += 1}`).current;
@@ -105,8 +106,8 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     originWhitelist,
     onShouldStartLoadWithRequestProp,
     onShouldStartLoadWithRequestCallback,
-    validateMeta: (event: WebViewNativeEvent): WebViewNativeEvent => event, // TODO
-    validateData: (data: object) => data, // TODO
+    validateMeta,
+    validateData,
   })
 
   useImperativeHandle(ref, () => ({

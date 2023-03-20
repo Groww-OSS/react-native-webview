@@ -1008,4 +1008,14 @@ export interface WebViewSharedProps extends ViewProps {
    * An object that specifies the credentials of a user to be used for basic authentication.
    */
   basicAuthCredential?: BasicAuthCredential;
+
+  /**
+   * Event metadata validation.
+   */
+  validateMeta: (event: WebViewNativeEvent) => WebViewNativeEvent;
+
+  /**
+   * Event data validation.
+   */
+  validateData: (data: object) => object;
 }
