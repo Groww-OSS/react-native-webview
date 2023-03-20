@@ -9,11 +9,8 @@ import {
   WebViewHttpErrorEvent,
   WebViewMessageEvent,
   WebViewMessage,
-  WebViewNavigation,
   WebViewNavigationEvent,
   WebViewProgressEvent,
-  WebViewRenderProcessGoneEvent,
-  WebViewTerminatedEvent,
   WebViewNativeEvent,
 } from './WebViewTypes';
 import styles from './WebView.styles';
@@ -103,16 +100,12 @@ export {
 
 export const useWebWiewLogic = ({
   startInLoadingState,
-  onNavigationStateChange,
   onLoadStart,
   onLoad,
-  onLoadProgress,
   onLoadEnd,
   onError,
   onHttpErrorProp,
   onMessageProp,
-  onRenderProcessGoneProp,
-  onContentProcessDidTerminateProp,
   originWhitelist,
   onShouldStartLoadWithRequestProp,
   onShouldStartLoadWithRequestCallback,
@@ -120,16 +113,12 @@ export const useWebWiewLogic = ({
   validateData,
 }: {
   startInLoadingState?: boolean
-  onNavigationStateChange?: (event: WebViewNavigation) => void;
   onLoadStart?: (event: WebViewNavigationEvent) => void;
   onLoad?: (event: WebViewNavigationEvent) => void;
-  onLoadProgress?: (event: WebViewProgressEvent) => void;
   onLoadEnd?: (event: WebViewNavigationEvent | WebViewErrorEvent) => void;
   onError?: (event: WebViewErrorEvent) => void;
   onHttpErrorProp?: (event: WebViewHttpErrorEvent) => void;
   onMessageProp?: (event: WebViewMessage) => void;
-  onRenderProcessGoneProp?: (event: WebViewRenderProcessGoneEvent) => void;
-  onContentProcessDidTerminateProp?: (event: WebViewTerminatedEvent) => void;
   originWhitelist: readonly string[];
   onShouldStartLoadWithRequestProp?: OnShouldStartLoadWithRequest;
   onShouldStartLoadWithRequestCallback: (shouldStart: boolean, url: string, lockIdentifier?: number | undefined) => void;
@@ -147,18 +136,14 @@ export const useWebWiewLogic = ({
 
   const passesWhitelistUse = useCallback(passesWhitelist, [originWhitelist])
 
-  const extractMeta = (nativeEvent: WebViewNativeEvent): WebViewNativeEvent => {
+  const extractMeta = (nativeEvent: WebViewNativeEvent): WebViewNativeEvent => ({
     url: String(nativeEvent.url),
     loading: Boolean(nativeEvent.loading),
     title: String(nativeEvent.title),
     canGoBack: Boolean(nativeEvent.canGoBack),
     canGoForward: Boolean(nativeEvent.canGoForward),
     lockIdentifier: Number(nativeEvent.lockIdentifier),
-  };
-
-  const updateNavigationState = useCallback((event: WebViewNavigationEvent) => {
-    onNavigationStateChange?.(event.nativeEvent);
-  }, [onNavigationStateChange]);
+  });
 
   const onLoadingStart = useCallback((event: WebViewNavigationEvent) => {
     // Needed for android
@@ -166,8 +151,7 @@ export const useWebWiewLogic = ({
     // !Needed for android
 
     onLoadStart?.(event);
-    updateNavigationState(event);
-  }, [onLoadStart, updateNavigationState]);
+  }, [onLoadStart]);
 
   const onLoadingError = useCallback((event: WebViewErrorEvent) => {
     event.persist();
@@ -186,18 +170,6 @@ export const useWebWiewLogic = ({
     onHttpErrorProp?.(event);
   }, [onHttpErrorProp]);
 
-  // Android Only
-  const onRenderProcessGone = useCallback((event: WebViewRenderProcessGoneEvent) => {
-    onRenderProcessGoneProp?.(event);
-  }, [onRenderProcessGoneProp]);
-  // !Android Only
-
-  // iOS Only
-  const onContentProcessDidTerminate = useCallback((event: WebViewTerminatedEvent) => {
-      onContentProcessDidTerminateProp?.(event);
-  }, [onContentProcessDidTerminateProp]);
-  // !iOS Only
-
   const onLoadingFinish = useCallback((event: WebViewNavigationEvent) => {
     onLoad?.(event);
     onLoadEnd?.(event);
@@ -210,8 +182,8 @@ export const useWebWiewLogic = ({
       setViewState('IDLE');
     }
     // !on Android, only if url === startUrl
-    updateNavigationState(event);
-  }, [onLoad, onLoadEnd, updateNavigationState, passesWhitelistUse]);
+    // REMOVED: updateNavigationState(event);
+  }, [onLoad, onLoadEnd, passesWhitelistUse]);
 
   const onMessage = useCallback((event: WebViewMessageEvent) => {
     const { nativeEvent } = event;
@@ -232,8 +204,8 @@ export const useWebWiewLogic = ({
       setViewState(prevViewState => prevViewState === 'LOADING' ? 'IDLE' : prevViewState);
     }
     // !patch for Android only
-    onLoadProgress?.(event);
-  }, [onLoadProgress]);
+    // REMOVED: onLoadProgress?.(event);
+  }, []);
 
   const onShouldStartLoadWithRequest = useMemo(() =>  createOnShouldStartLoadWithRequest(
       onShouldStartLoadWithRequestCallback,
@@ -249,8 +221,6 @@ export const useWebWiewLogic = ({
     onLoadingError,
     onLoadingFinish,
     onHttpError,
-    onRenderProcessGone,
-    onContentProcessDidTerminate,
     onMessage,
     passesWhitelist,
     viewState,

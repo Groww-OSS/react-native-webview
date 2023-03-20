@@ -60,14 +60,11 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   setDisplayZoomControls = false,
   nestedScrollEnabled = false,
   startInLoadingState,
-  onNavigationStateChange,
   onLoadStart,
   onError,
   onLoad,
   onLoadEnd,
-  onLoadProgress,
   onHttpError: onHttpErrorProp,
-  onRenderProcessGone: onRenderProcessGoneProp,
   onMessage: onMessageProp,
   renderLoading,
   renderError,
@@ -92,15 +89,12 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     }
   }, []);
 
-  const { onLoadingStart, onShouldStartLoadWithRequest, onMessage, viewState, setViewState, lastErrorEvent, onHttpError, onLoadingError, onLoadingFinish, onLoadingProgress, onRenderProcessGone, passesWhitelist } = useWebWiewLogic({
-    onNavigationStateChange,
+  const { onLoadingStart, onShouldStartLoadWithRequest, onMessage, viewState, setViewState, lastErrorEvent, onHttpError, onLoadingError, onLoadingFinish, onLoadingProgress, passesWhitelist } = useWebWiewLogic({
     onLoad,
     onError,
     onHttpErrorProp,
     onLoadEnd,
-    onLoadProgress,
     onLoadStart,
-    onRenderProcessGoneProp,
     onMessageProp,
     startInLoadingState,
     originWhitelist,
@@ -181,7 +175,6 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     onLoadingProgress={onLoadingProgress}
     onLoadingStart={onLoadingStart}
     onHttpError={onHttpError}
-    onRenderProcessGone={onRenderProcessGone}
     onMessage={onMessage}
     onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 

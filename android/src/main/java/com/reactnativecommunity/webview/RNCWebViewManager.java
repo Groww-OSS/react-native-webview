@@ -84,7 +84,6 @@ import com.reactnativecommunity.webview.events.TopLoadingProgressEvent;
 import com.reactnativecommunity.webview.events.TopLoadingStartEvent;
 import com.reactnativecommunity.webview.events.TopMessageEvent;
 import com.reactnativecommunity.webview.events.TopShouldStartLoadWithRequestEvent;
-import com.reactnativecommunity.webview.events.TopRenderProcessGoneEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -615,7 +614,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     export.put(TopShouldStartLoadWithRequestEvent.EVENT_NAME, MapBuilder.of("registrationName", "onShouldStartLoadWithRequest"));
     export.put(ScrollEventType.getJSEventName(ScrollEventType.SCROLL), MapBuilder.of("registrationName", "onScroll"));
     export.put(TopHttpErrorEvent.EVENT_NAME, MapBuilder.of("registrationName", "onHttpError"));
-    export.put(TopRenderProcessGoneEvent.EVENT_NAME, MapBuilder.of("registrationName", "onRenderProcessGone"));
     return export;
   }
 
@@ -941,41 +939,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
           webView,
           new TopHttpErrorEvent(webView.getId(), eventData));
       }
-    }
-
-    @TargetApi(Build.VERSION_CODES.O)
-    @Override
-    public boolean onRenderProcessGone(WebView webView, RenderProcessGoneDetail detail) {
-        // WebViewClient.onRenderProcessGone was added in O.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            return false;
-        }
-        super.onRenderProcessGone(webView, detail);
-
-        if(detail.didCrash()){
-          Log.e(TAG, "The WebView rendering process crashed.");
-        }
-        else{
-          Log.w(TAG, "The WebView rendering process was killed by the system.");
-        }
-
-        // if webView is null, we cannot return any event
-        // since the view is already dead/disposed
-        // still prevent the app crash by returning true.
-        if(webView == null){
-          return true;
-        }
-
-        WritableMap event = createWebViewEvent(webView, webView.getUrl());
-        event.putBoolean("didCrash", detail.didCrash());
-
-      ((RNCWebView) webView).dispatchEvent(
-          webView,
-          new TopRenderProcessGoneEvent(webView.getId(), event)
-        );
-
-        // returning false would crash the app.
-        return true;
     }
 
     protected void emitFinishEvent(WebView webView, String url) {

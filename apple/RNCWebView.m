@@ -459,10 +459,6 @@ RCTAutoInsetsProtocol>
     _webView.scrollView.delegate = nil;
 #endif // !TARGET_OS_OSX
     _webView = nil;
-    if (_onContentProcessDidTerminate) {
-      NSMutableDictionary<NSString *, id> *event = [self baseEvent];
-      _onContentProcessDidTerminate(event);
-    }
   }
   
   [super removeFromSuperview];
@@ -1131,10 +1127,6 @@ RCTAutoInsetsProtocol>
 - (void)webViewWebContentProcessDidTerminate:(WKWebView *)webView
 {
   RCTLogWarn(@"Webview Process Terminated");
-  if (_onContentProcessDidTerminate) {
-    NSMutableDictionary<NSString *, id> *event = [self baseEvent];
-    _onContentProcessDidTerminate(event);
-  }
 }
 
 /**

@@ -124,10 +124,6 @@ export interface WebViewHttpError extends WebViewNativeEvent {
   statusCode: number;
 }
 
-export interface WebViewRenderProcessGoneDetail {
-  didCrash: boolean;
-}
-
 export type WebViewEvent = NativeSyntheticEvent<WebViewNativeEvent>;
 
 export type WebViewProgressEvent =
@@ -144,12 +140,7 @@ export type WebViewMessageEvent = NativeSyntheticEvent<WebViewMessage>;
 
 export type WebViewErrorEvent = NativeSyntheticEvent<WebViewError>;
 
-export type WebViewTerminatedEvent = NativeSyntheticEvent<WebViewNativeEvent>;
-
 export type WebViewHttpErrorEvent = NativeSyntheticEvent<WebViewHttpError>;
-
-export type WebViewRenderProcessGoneEvent =
-  NativeSyntheticEvent<WebViewRenderProcessGoneDetail>;
 
 export type WebViewScrollEvent = NativeSyntheticEvent<NativeScrollEvent>;
 
@@ -286,7 +277,6 @@ export interface AndroidNativeWebViewProps extends CommonNativeWebViewProps {
   javaScriptEnabled?: boolean;
   mixedContentMode?: 'never' | 'always' | 'compatibility';
   onContentSizeChange?: (event: WebViewEvent) => void;
-  onRenderProcessGone?: (event: WebViewRenderProcessGoneEvent) => void;
   overScrollMode?: OverScrollModeType;
   saveFormDataDisabled?: boolean;
   setSupportMultipleWindows?: boolean;
@@ -338,7 +328,6 @@ export interface IOSNativeWebViewProps extends CommonNativeWebViewProps {
   pagingEnabled?: boolean;
   scrollEnabled?: boolean;
   useSharedProcessPool?: boolean;
-  onContentProcessDidTerminate?: (event: WebViewTerminatedEvent) => void;
   injectedJavaScriptForMainFrameOnly?: boolean;
   injectedJavaScriptBeforeContentLoadedForMainFrameOnly?: boolean;
   onFileDownload?: (event: FileDownloadEvent) => void;
@@ -546,12 +535,6 @@ export interface IOSWebViewProps extends WebViewSharedProps {
   keyboardDisplayRequiresUserAction?: boolean;
 
   /**
-   * Function that is invoked when the WebKit WebView content process gets terminated.
-   * @platform ios
-   */
-  onContentProcessDidTerminate?: (event: WebViewTerminatedEvent) => void;
-
-  /**
    * If `true` (default), loads the `injectedJavaScript` only into the main frame.
    * If `false`, loads it into all frames (e.g. iframes).
    * @platform ios
@@ -652,14 +635,7 @@ export interface IOSWebViewProps extends WebViewSharedProps {
 }
 
 export interface AndroidWebViewProps extends WebViewSharedProps {
-  onNavigationStateChange?: (event: WebViewNavigation) => void;
   onContentSizeChange?: (event: WebViewEvent) => void;
-
-  /**
-   * Function that is invoked when the `WebView` process crashes or is killed by the OS.
-   * Works only on Android (minimum API level 26).
-   */
-  onRenderProcessGone?: (event: WebViewRenderProcessGoneEvent) => void;
 
   /**
    * https://developer.android.com/reference/android/webkit/WebSettings.html#setCacheMode(int)
@@ -912,11 +888,6 @@ export interface WebViewSharedProps extends ViewProps {
   onHttpError?: (event: WebViewHttpErrorEvent) => void;
 
   /**
-   * Function that is invoked when the `WebView` loading starts or ends.
-   */
-  onNavigationStateChange?: (event: WebViewNavigation) => void;
-
-  /**
    * Function that is invoked when the webview calls `window.ReactNativeWebView.postMessage`.
    * Setting this property will inject this global into your webview.
    *
@@ -924,11 +895,6 @@ export interface WebViewSharedProps extends ViewProps {
    * available on the event object, `event.nativeEvent.data`. `data` must be a string.
    */
   onMessage?: (event: WebViewMessage) => void;
-
-  /**
-   * Function that is invoked when the `WebView` is loading.
-   */
-  onLoadProgress?: (event: WebViewProgressEvent) => void;
 
   /**
    * Boolean value that forces the `WebView` to show the loading view
