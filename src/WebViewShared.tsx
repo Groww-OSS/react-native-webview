@@ -128,6 +128,7 @@ export const useWebWiewLogic = ({
   const startUrl = useRef<string | null>(null)
 
   const passesWhitelist = (url: string) => {
+    if (!url || typeof url !== 'string') return false;
     return _passesWhitelist(compileWhitelist(originWhitelist), url);
   }
 
@@ -167,7 +168,6 @@ export const useWebWiewLogic = ({
     onLoad?.(event);
     onLoadEnd?.(event);
     const { nativeEvent: { url } } = event;
-
     if (!passesWhitelistUse(url)) return;
 
     // on Android, only if url === startUrl
@@ -192,13 +192,15 @@ export const useWebWiewLogic = ({
 
   const onLoadingProgress = useCallback((event: WebViewProgressEvent) => {
     const { nativeEvent: { progress } } = event;
+    if (!passesWhitelistUse(event.nativeEvent.url)) return;
+
     // patch for Android only
     if (Platform.OS === "android" && progress === 1) {
       setViewState(prevViewState => prevViewState === 'LOADING' ? 'IDLE' : prevViewState);
     }
     // !patch for Android only
     // REMOVED: onLoadProgress?.(event);
-  }, []);
+  }, [passesWhitelistUse]);
 
   const onShouldStartLoadWithRequest = useMemo(() =>  createOnShouldStartLoadWithRequest(
       onShouldStartLoadWithRequestCallback,
