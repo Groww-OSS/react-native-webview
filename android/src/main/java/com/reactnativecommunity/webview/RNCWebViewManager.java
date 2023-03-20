@@ -30,7 +30,6 @@ import android.webkit.DownloadListener;
 import android.webkit.GeolocationPermissions;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JavascriptInterface;
-import android.webkit.RenderProcessGoneDetail;
 import android.webkit.SslErrorHandler;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
