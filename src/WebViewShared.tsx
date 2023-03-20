@@ -147,6 +147,15 @@ export const useWebWiewLogic = ({
 
   const passesWhitelistUse = useCallback(passesWhitelist, [originWhitelist])
 
+  const extractMeta = (nativeEvent: WebViewNativeEvent): WebViewNativeEvent => {
+    url: String(nativeEvent.url),
+    loading: Boolean(nativeEvent.loading),
+    title: String(nativeEvent.title),
+    canGoBack: Boolean(nativeEvent.canGoBack),
+    canGoForward: Boolean(nativeEvent.canGoForward),
+    lockIdentifier: Number(nativeEvent.lockIdentifier),
+  };
+
   const updateNavigationState = useCallback((event: WebViewNavigationEvent) => {
     onNavigationStateChange?.(event.nativeEvent);
   }, [onNavigationStateChange]);
@@ -211,14 +220,7 @@ export const useWebWiewLogic = ({
     // TODO: can/should we perform any other validation?
 
     const data = JSON.stringify(validateData(JSON.parse(nativeEvent.data)));
-    const meta = validateMeta({
-      url: String(nativeEvent.url),
-      loading: Boolean(nativeEvent.loading),
-      title: String(nativeEvent.title),
-      canGoBack: Boolean(nativeEvent.canGoBack),
-      canGoForward: Boolean(nativeEvent.canGoForward),
-      lockIdentifier: Number(nativeEvent.lockIdentifier),
-    });
+    const meta = validateMeta(extractMeta(nativeEvent));
 
     onMessageProp?.({ ...meta, data });
   }, [onMessageProp, passesWhitelistUse, validateData, validateMeta]);
