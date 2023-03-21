@@ -131,7 +131,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   }, [messagingModuleName, directEventCallbacks])
 
   const userAgent = 'chrome/200' // TODO
-  const version = userAgent.match(/chrome\/((?:[0-9]+\.)+[0-9]+)/i)?.[0]
+  const version = userAgent.match(/chrome\/((?:[0-9]+\.)+[0-9]+)/i)?.[1]
   if (!(versionPasses(version, minimumChromeVersion) && versionPasses(version, hardMinimumChromeVersion))) {
     return (
       <View style={{ alignSelf: 'flex-start' }}>
