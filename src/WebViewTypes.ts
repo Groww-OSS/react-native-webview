@@ -247,7 +247,6 @@ export interface CommonNativeWebViewProps extends ViewProps {
   /**
    * Append to the existing user-agent. Overridden if `userAgent` is set.
    */
-  applicationNameForUserAgent?: string;
   basicAuthCredential?: BasicAuthCredential;
 }
 
@@ -889,11 +888,6 @@ export interface WebViewSharedProps extends ViewProps {
    * Should caching be enabled. Default is true.
    */
   cacheEnabled?: boolean;
-
-  /**
-   * Append to the existing user-agent. Overridden if `userAgent` is set.
-   */
-  applicationNameForUserAgent?: string;
 
   /**
    * An object that specifies the credentials of a user to be used for basic authentication.

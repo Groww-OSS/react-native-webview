@@ -364,17 +364,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
     this.setUserAgentString(view);
   }
 
-  @ReactProp(name = "applicationNameForUserAgent")
-  public void setApplicationNameForUserAgent(WebView view, @Nullable String applicationName) {
-    if(applicationName != null) {
-      String defaultUserAgent = WebSettings.getDefaultUserAgent(view.getContext());
-      mUserAgentWithApplicationName = defaultUserAgent + " " + applicationName;
-    } else {
-      mUserAgentWithApplicationName = null;
-    }
-    this.setUserAgentString(view);
-  }
-
   protected void setUserAgentString(WebView view) {
     if(mUserAgent != null) {
       view.getSettings().setUserAgentString(mUserAgent);

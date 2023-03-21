@@ -61,7 +61,6 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *_Nonnull)request
 @property (nonatomic, assign) BOOL incognito;
 @property (nonatomic, assign) BOOL useSharedProcessPool;
 @property (nonatomic, copy) NSString * _Nullable userAgent;
-@property (nonatomic, copy) NSString * _Nullable applicationNameForUserAgent;
 @property (nonatomic, assign) BOOL cacheEnabled;
 @property (nonatomic, assign) BOOL javaScriptEnabled;
 @property (nonatomic, assign) BOOL allowsLinkPreview;
