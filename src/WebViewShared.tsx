@@ -222,3 +222,20 @@ export const useWebWiewLogic = ({
     lastErrorEvent,
   }
 };
+
+export const versionPasses = (version: string | undefined, minimum: string | undefined): boolean => {
+  if (!version || !minimum) return false
+  if (typeof version !== 'string' || typeof minimum !== 'string') return false
+  const versionRegex = /^[0-9]+(\.[0-9]+)*$/
+  if (!versionRegex.test(version) || !versionRegex.test(minimum)) return false
+  const versionParts = version.split('.').map(Number)
+  const minimumParts = minimum.split('.').map(Number)
+  const len = Math.max(versionParts.length, minimumParts.length)
+  for (let i = 0; i < len; i += 1) {
+    const ver = versionParts[i] || 0
+    const min = minimumParts[i] || 0
+    if (ver > min) return true
+    if (ver < min) return false
+  }
+  return true // equals
+}

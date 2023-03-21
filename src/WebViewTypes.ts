@@ -909,4 +909,14 @@ export interface WebViewSharedProps extends ViewProps {
    * Event data validation.
    */
   validateData: (data: object) => object;
+
+  /**
+   * Webview will refuse to work on iOS versions below this one. Required for iOS.
+   */
+  minimumIOSVersion?: string,
+
+  /**
+   * Webview will refuse to work on Chrome versions below this one. Required for Android.
+   */
+  minimumChromeVersion?: string,
 }

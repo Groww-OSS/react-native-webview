@@ -1,6 +1,7 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 
 import {
+  Text,
   View,
   NativeModules,
 } from 'react-native';
@@ -17,6 +18,7 @@ import {
   defaultRenderError,
   defaultRenderLoading,
   useWebWiewLogic,
+  versionPasses,
 } from './WebViewShared';
 import {
   AndroidWebViewProps,
@@ -43,6 +45,7 @@ const mediaPlaybackRequiresUserAction = true;
 // Android only
 const setSupportMultipleWindows = true;
 const mixedContentMode = 'never'
+const hardMinimumChromeVersion = '100.0' // TODO: determinime a good lower bound
 
 const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   overScrollMode = 'always',
@@ -71,6 +74,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   onShouldStartLoadWithRequest: onShouldStartLoadWithRequestProp,
   validateMeta,
   validateData,
+  minimumChromeVersion,
   ...otherProps
 }, ref) => {
   const messagingModuleName = useRef<string>(`WebViewMessageHandler${uniqueRef += 1}`).current;
@@ -126,6 +130,18 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
     BatchedBridge.registerCallableModule(messagingModuleName, directEventCallbacks);
   }, [messagingModuleName, directEventCallbacks])
 
+  const userAgent = 'chrome/200' // TODO
+  const version = userAgent.match(/chrome\/((?:[0-9]+\.)+[0-9]+)/i)?.[0]
+  if (!(versionPasses(version, minimumChromeVersion) && versionPasses(version, hardMinimumChromeVersion))) {
+    return (
+      <View style={{ alignSelf: 'flex-start' }}>
+        <Text style={{ color: 'red' }}>
+          Chrome version is outdated and insecure. Update it to continue.
+        </Text>
+      </View>
+    );
+  }
+
   let otherView = null;
   if (viewState === 'LOADING') {
     otherView = (renderLoading || defaultRenderLoading)();
@@ -156,7 +172,6 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   if (typeof source === "object" && 'uri' in source && !passesWhitelist(source.uri)){
     source = {uri: "about:blank"};
   }
-
 
   const NativeWebView = RNCWebView;
 

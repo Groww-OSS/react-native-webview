@@ -1,7 +1,9 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useRef } from 'react';
 import {
+  Text,
   View,
   NativeModules,
+  Platform,
 } from 'react-native';
 import invariant from 'invariant';
 
@@ -13,6 +15,7 @@ import {
   defaultRenderError,
   defaultRenderLoading,
   useWebWiewLogic,
+  versionPasses,
 } from './WebViewShared';
 import {
   IOSWebViewProps,
@@ -22,7 +25,6 @@ import {
 } from './WebViewTypes';
 
 import styles from './WebView.styles';
-
 
 const codegenNativeCommands = codegenNativeCommandsUntyped as <T extends {}>(options: { supportedCommands: (keyof T)[] }) => T;
 
@@ -62,6 +64,7 @@ const useSharedProcessPool = false;
 const sharedCookiesEnabled = false;
 const enableApplePay = false;
 const dataDetectorTypes = 'none';
+const hardMinimumIOSVersion = '12.5.6' // TODO: determinime a good lower bound
 
 const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   javaScriptEnabled = true,
@@ -86,6 +89,7 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   validateData,
   decelerationRate: decelerationRateProp,
   onShouldStartLoadWithRequest: onShouldStartLoadWithRequestProp,
+  minimumIOSVersion,
   ...otherProps
 }, ref) => {
   const webViewRef = useRef<NativeWebViewIOS | null>(null);
@@ -133,6 +137,17 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   useWarnIfChanges(incognito, 'incognito');
   useWarnIfChanges(mediaPlaybackRequiresUserAction, 'mediaPlaybackRequiresUserAction');
   useWarnIfChanges(dataDetectorTypes, 'dataDetectorTypes');
+
+  const version = String(Platform.Version)
+  if (!(versionPasses(version, minimumIOSVersion) && versionPasses(version, hardMinimumIOSVersion))) {
+    return (
+      <View style={{ alignSelf: 'flex-start' }}>
+        <Text style={{ color: 'red' }}>
+          iOS version is outdated and insecure. Update it to continue.
+        </Text>
+      </View>
+    );
+  }
 
   let otherView = null;
   if (viewState === 'LOADING') {
