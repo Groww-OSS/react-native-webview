@@ -67,7 +67,6 @@ shouldStartLoadForRequest:(NSMutableDictionary<NSString *, id> *_Nonnull)request
 @property (nonatomic, assign) BOOL showsHorizontalScrollIndicator;
 @property (nonatomic, assign) BOOL showsVerticalScrollIndicator;
 @property (nonatomic, assign) BOOL directionalLockEnabled;
-@property (nonatomic, assign) BOOL ignoreSilentHardwareSwitch;
 @property (nonatomic, copy) NSDictionary * _Nullable basicAuthCredential;
 @property (nonatomic, assign) BOOL pullToRefreshEnabled;
 @property (nonatomic, assign) BOOL enableApplePay;

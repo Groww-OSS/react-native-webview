@@ -475,13 +475,6 @@ export interface IOSWebViewProps extends WebViewSharedProps {
   sharedCookiesEnabled?: boolean;
 
   /**
-   * When set to true the hardware silent switch is ignored.
-   * The default value is `false`.
-   * @platform ios
-   */
-  ignoreSilentHardwareSwitch?: boolean;
-
-  /**
    * Set true if StatusBar should be light when user watch video fullscreen.
    * The default value is `true`.
    * @platform ios

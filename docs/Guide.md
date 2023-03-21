@@ -602,7 +602,7 @@ And add this prop to your `WebView` component:
 
 There are some inconsistencies in how the hardware silence switch is handled between embedded `audio` and `video` elements and between iOS and Android platforms.
 
-Audio on `iOS` will be muted when the hardware silence switch is in the on position, unless the `ignoreSilentHardwareSwitch` parameter is set to true.
+Audio on `iOS` will be muted when the hardware silence switch.
 
 Video on `iOS` will always ignore the hardware silence switch.
 

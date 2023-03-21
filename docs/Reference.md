@@ -69,7 +69,6 @@ This document lays out the current public properties and methods for the React N
 - [`sharedCookiesEnabled`](Reference.md#sharedCookiesEnabled)
 - [`textZoom`](Reference.md#textZoom)
 - [`pullToRefreshEnabled`](Reference.md#pullToRefreshEnabled)
-- [`ignoreSilentHardwareSwitch`](Reference.md#ignoreSilentHardwareSwitch)
 - [`onFileDownload`](Reference.md#onFileDownload)
 - [`limitsNavigationsToAppBoundDomains`](Reference.md#limitsNavigationsToAppBoundDomains)
 - [`textInteractionEnabled`](Reference.md#textInteractionEnabled)
@@ -1263,16 +1262,6 @@ Example:
 ### `pullToRefreshEnabled`[⬆](#props-index)<!-- Link generated with jump2header -->
 
 Boolean value that determines whether a pull to refresh gesture is available in the `WebView`. The default value is `false`. If `true`, sets `bounces` automatically to `true`.
-
-| Type    | Required | Platform |
-| ------- | -------- | -------- |
-| boolean | No       | iOS      |
-
-### `ignoreSilentHardwareSwitch`[⬆](#props-index)<!-- Link generated with jump2header -->
-
-(ios only)
-
-When set to true the hardware silent switch is ignored. Default: `false`
 
 | Type    | Required | Platform |
 | ------- | -------- | -------- |
