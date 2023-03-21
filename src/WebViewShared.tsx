@@ -226,6 +226,22 @@ export const useWebWiewLogic = ({
 export const versionPasses = (version: string | undefined, minimum: string | undefined): boolean => {
   if (!version || !minimum) return false
   if (typeof version !== 'string' || typeof minimum !== 'string') return false
+
+  if (minimum.includes(', ')) {
+    // We have a set of possible versions
+    const variants = minimum.split(', ')
+    // Every entry but the last one should be with an upper bound
+    if (!variants.slice(0, -1).every(x => x.includes(' <'))) return false
+    return variants.some(x => versionPasses(version, x)) // Any match passes
+  }
+
+  if (minimum.includes(' <')) {
+    const [min, max, ...rest] = minimum.split(' <')
+    if (rest.length > 0) return false
+    // Last check is required for correctness/formatting validation
+    return versionPasses(version, min) && !versionPasses(version, max) && versionPasses(max, version)
+  }
+
   const versionRegex = /^[0-9]+(\.[0-9]+)*$/
   if (!versionRegex.test(version) || !versionRegex.test(minimum)) return false
   const versionParts = version.split('.').map(Number)
