@@ -906,4 +906,10 @@ export interface WebViewSharedProps extends ViewProps {
    * Webview will refuse to work on Chrome versions below this one. Required for Android.
    */
   minimumChromeVersion?: string,
+
+  /**
+   * Component to render if the OS version is not supported.
+   */
+
+  unsupportedVersionComponent?: ReactElement,
 }
