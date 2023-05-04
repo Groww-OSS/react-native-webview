@@ -151,7 +151,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   const version = userAgent.match(/chrome\/((?:[0-9]+\.)+[0-9]+)/i)?.[1]
   if (!(versionPasses(version, minimumChromeVersion) && versionPasses(version, hardMinimumChromeVersion))) {
     if (UnsupportedVersionComponent) {
-      return <UnsupportedVersionComponent device="android" />
+      return <UnsupportedVersionComponent />
     }
     return (
       <View style={{ alignSelf: 'flex-start' }}>

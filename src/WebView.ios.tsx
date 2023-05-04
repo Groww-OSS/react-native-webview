@@ -142,7 +142,7 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   const version = String(Platform.Version)
   if (!(versionPasses(version, minimumIOSVersion) && versionPasses(version, hardMinimumIOSVersion))) {
     if (UnsupportedVersionComponent) {
-      return <UnsupportedVersionComponent device="ios"/>
+      return <UnsupportedVersionComponent />
     }
     return (
       <View style={{ alignSelf: 'flex-start' }}>

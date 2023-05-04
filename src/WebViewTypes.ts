@@ -24,10 +24,6 @@ type WebViewCommands =
 
 type AndroidWebViewCommands = 'clearHistory' | 'clearCache' | 'clearFormData';
 
-interface UnsupportedVersionProps {
-  device: string;
-}
-
 interface RNCWebViewUIManager<Commands extends string> extends UIManagerStatic {
   getViewManagerConfig: (name: string) => {
     Commands: { [key in Commands]: number };
@@ -910,10 +906,4 @@ export interface WebViewSharedProps extends ViewProps {
    * Webview will refuse to work on Chrome versions below this one. Required for Android.
    */
   minimumChromeVersion?: string,
-
-  /**
-   * Component to render if the OS version is not supported.
-   */
-
-  unsupportedVersionComponent?: React.ComponentType<UnsupportedVersionProps>,
 }
