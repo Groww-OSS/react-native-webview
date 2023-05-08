@@ -85,6 +85,7 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   validateMeta,
   validateData,
   minimumChromeVersion,
+  unsupportedVersionComponent: UnsupportedVersionComponent,
   ...otherProps
 }, ref) => {
   const messagingModuleName = useRef<string>(`WebViewMessageHandler${uniqueRef += 1}`).current;
@@ -149,6 +150,9 @@ const WebViewComponent = forwardRef<{}, AndroidWebViewProps>(({
   if (!userAgent) return null // stop the rendering until userAgent is known
   const version = userAgent.match(/chrome\/((?:[0-9]+\.)+[0-9]+)/i)?.[1]
   if (!(versionPasses(version, minimumChromeVersion) && versionPasses(version, hardMinimumChromeVersion))) {
+    if (UnsupportedVersionComponent) {
+      return <UnsupportedVersionComponent />
+    }
     return (
       <View style={{ alignSelf: 'flex-start' }}>
         <Text style={{ color: 'red' }}>

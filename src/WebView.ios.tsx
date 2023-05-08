@@ -90,6 +90,7 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
   decelerationRate: decelerationRateProp,
   onShouldStartLoadWithRequest: onShouldStartLoadWithRequestProp,
   minimumIOSVersion,
+  unsupportedVersionComponent: UnsupportedVersionComponent,
   ...otherProps
 }, ref) => {
   const webViewRef = useRef<NativeWebViewIOS | null>(null);
@@ -140,6 +141,9 @@ const WebViewComponent = forwardRef<{}, IOSWebViewProps>(({
 
   const version = String(Platform.Version)
   if (!(versionPasses(version, minimumIOSVersion) && versionPasses(version, hardMinimumIOSVersion))) {
+    if (UnsupportedVersionComponent) {
+      return <UnsupportedVersionComponent />
+    }
     return (
       <View style={{ alignSelf: 'flex-start' }}>
         <Text style={{ color: 'red' }}>
