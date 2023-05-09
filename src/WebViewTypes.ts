@@ -1,6 +1,5 @@
 /* eslint-disable react/no-multi-comp, max-classes-per-file */
-
-import { ReactElement, Component } from 'react';
+import { ReactElement, Component, ElementType } from 'react';
 import {
   NativeSyntheticEvent,
   ViewProps,
@@ -911,5 +910,5 @@ export interface WebViewSharedProps extends ViewProps {
    * Component to render if the OS version is not supported.
    */
 
-  unsupportedVersionComponent?: ReactElement,
+  unsupportedVersionComponent?: ElementType,
 }
